@@ -45,7 +45,7 @@
 
                         <div class="index-item animate-up" style="animation-delay: 0.2s;">
                             <span class="index-number">02</span>
-                            <span class="index-text">Restricciones,<br>Specs y Funcionalidades</span>
+                            <span class="index-text">Restricciones,<br>Especificaciones y Funcionalidades</span>
                         </div>
 
                         <div class="index-item animate-up" style="animation-delay: 0.3s;">
@@ -214,206 +214,240 @@
 
 
 
+        <!-- CU1 -->
         <div class="slide" data-step="0">
-            <h2>Caso de Uso CU1: Alta e inicio de sesión</h2>
-            <div class="grid-2-col">
-                <div>
-                    <ul style="list-style: none; margin-left: 0;">
-                        <li><strong>Actor:</strong> Usuario No Registrado / Registrado</li>
-                        <li><strong>Objetivo:</strong> Crear cuenta o acceder al sistema para desbloquear funciones.
-                        </li>
-                        <li><strong>Funcionalidad:</strong> Sistema de Autenticación Laravel (Auth), Validaciones de
-                            formularios.</li>
-                    </ul>
-                    <div style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px;">
-                        <strong>Resultados de Aprendizaje:</strong><br>
-                        <span class="ra-tag">R3</span> Tecnologías web<br>
-                        <span class="ra-tag">R4</span> Implementar servicios web
+            <h2>Caso de Uso CU1: Alta e inicio de sesión de usuarios</h2>
+            <div class="grid-2-col layout-container">
+                <div class="content-column">
+                    <p><strong>Actor(es):</strong> Usuario no registrado / Usuario registrado</p>
+                    <p><strong>Objetivo:</strong> Crear una cuenta o iniciar sesión para acceder a funcionalidades
+                        personalizadas del portal.</p>
+                    <p><strong>Funcionalidad implementada:</strong><br>Sistema de autenticación con Laravel, validación
+                        de formularios y gestión de sesiones.</p>
+
+                    <div class="ra-block" style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 15px;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 10px;">Resultados de Aprendizaje:</h4>
+                        <ul class="clean-list">
+                            <li><span class="ra-tag">R3</span> Conoce, distingue y utiliza diferentes tecnologías,
+                                lenguajes, protocolos y estándares propios de la computación web.</li>
+                            <li><span class="ra-tag">R4</span> Diseña, implementa, valida y ofrece servicios web.</li>
+                        </ul>
                     </div>
                 </div>
-                <div>
-                    <div class="placeholder-img" data-img="capturas/cu1_login.png">
-                        Captura real aquí (Login/Registro)<br>
-                        (no inventar)
+                <div class="image-column">
+                    <div class="placeholder-img">
+                        Captura real aquí (no inventar)
                     </div>
                 </div>
             </div>
+            <div class="slide-footer">Casos de Uso</div>
         </div>
 
+        <!-- CU2 -->
         <div class="slide" data-step="0">
-            <h2>Caso de Uso CU2: Navegar catálogo</h2>
-            <div class="grid-2-col">
-                <div>
-                    <ul style="list-style: none; margin-left: 0;">
-                        <li><strong>Actor:</strong> Cualquier usuario</li>
-                        <li><strong>Objetivo:</strong> Visualizar productos disponibles y ver sus características.</li>
-                        <li><strong>Funcionalidad:</strong> Listado dinámico (Blade + Foreach), Filtrado BD, Vista
-                            detalle.</li>
-                    </ul>
-                    <div style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px;">
-                        <strong>Resultados de Aprendizaje:</strong><br>
-                        <span class="ra-tag">R1</span> Relación elementos<br>
-                        <span class="ra-tag">R3</span> Lenguajes web (Blade/HTML)
+            <h2>Caso de Uso CU2: Navegación por el catálogo y consulta de productos</h2>
+            <div class="grid-2-col layout-container">
+                <div class="content-column">
+                    <p><strong>Actor(es):</strong> Cualquier usuario (registrado o invitado)</p>
+                    <p><strong>Objetivo:</strong> Explorar los productos ecológicos disponibles y consultar su
+                        información detallada.</p>
+                    <p><strong>Funcionalidad implementada:</strong><br>Listado dinámico con vistas Blade, consultas a
+                        base de datos y vista de detalle de producto.</p>
+
+                    <div class="ra-block" style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 15px;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 10px;">Resultados de Aprendizaje:</h4>
+                        <ul class="clean-list">
+                            <li><span class="ra-tag">R1</span> Comprende la relación entre los elementos estudiados.
+                            </li>
+                            <li><span class="ra-tag">R3</span> Conoce, distingue y utiliza diferentes tecnologías,
+                                lenguajes, protocolos y estándares propios de la computación web.</li>
+                        </ul>
                     </div>
                 </div>
-                <div>
-                    <div class="placeholder-img" data-img="capturas/cu2_catalogo.png">
-                        Captura real aquí (Catálogo)<br>
-                        (no inventar)
+                <div class="image-column">
+                    <div class="placeholder-img">
+                        Captura real aquí (no inventar)
                     </div>
                 </div>
             </div>
+            <div class="slide-footer">Casos de Uso</div>
         </div>
 
+        <!-- CU3 -->
         <div class="slide" data-step="0">
-            <h2>Caso de Uso CU4: Fusión de Carrito</h2>
-            <div class="grid-2-col">
-                <div>
-                    <ul style="list-style: none; margin-left: 0;">
-                        <li><strong>Actor:</strong> Invitado -> Usuario Registrado</li>
-                        <li><strong>Objetivo:</strong> No perder los productos añadidos antes de hacer login.</li>
-                        <li><strong>Funcionalidad:</strong> Gestión de Sesiones, Lógica de merge en controlador al
-                            autenticar.</li>
-                    </ul>
-                    <div style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px;">
-                        <strong>Resultados de Aprendizaje:</strong><br>
-                        <span class="ra-tag">R2</span> Modelos de comunicación<br>
-                        <span class="ra-tag">R4</span> Diseño de servicios
+            <h2>Caso de Uso CU3: Gestión de entidades del sistema (CRUD)</h2>
+            <div class="grid-2-col layout-container">
+                <div class="content-column">
+                    <p><strong>Actor(es):</strong> Administrador / Gestión interna</p>
+                    <p><strong>Objetivo:</strong> Crear, modificar y eliminar entidades del dominio (productos,
+                        usuarios, productores, vendedores).</p>
+                    <p><strong>Funcionalidad implementada:</strong><br>Controladores MVC, modelos Eloquent, migraciones
+                        y seeders.</p>
+
+                    <div class="ra-block" style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 15px;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 10px;">Resultados de Aprendizaje:</h4>
+                        <ul class="clean-list">
+                            <li><span class="ra-tag">R1</span> Comprende la relación entre los elementos estudiados.
+                            </li>
+                            <li><span class="ra-tag">R4</span> Diseña, implementa, valida y ofrece servicios web.</li>
+                            <li><span class="ra-tag">R15</span> Aplica las competencias adquiridas en la realización de
+                                una tarea de forma autónoma.</li>
+                        </ul>
                     </div>
                 </div>
-                <div>
-                    <div class="placeholder-img" data-img="capturas/cu4_carrito.png">
-                        Captura real aquí (Carrito fusionado)<br>
-                        (no inventar)
+                <div class="image-column">
+                    <div class="placeholder-img">
+                        Captura real aquí (no inventar)
                     </div>
                 </div>
             </div>
+            <div class="slide-footer">Casos de Uso</div>
         </div>
 
+        <!-- CU4 -->
         <div class="slide" data-step="0">
-            <h2>Caso de Uso CU5: Confirmación y Pago</h2>
-            <div class="grid-2-col">
-                <div>
-                    <ul style="list-style: none; margin-left: 0;">
-                        <li><strong>Actor:</strong> Comprador</li>
-                        <li><strong>Objetivo:</strong> Finalizar la compra y simular transacción financiera.</li>
-                        <li><strong>Funcionalidad:</strong> Transacciones de BD (rollback si falla), validación de
-                            stock, pasarela simulada.</li>
-                    </ul>
-                    <div style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px;">
-                        <strong>Resultados de Aprendizaje:</strong><br>
-                        <span class="ra-tag">R4</span> Implementar servicios<br>
-                        <span class="ra-tag">R15</span> Competencia autónoma
+            <h2>Caso de Uso CU4: Compra como invitado y fusión de carrito</h2>
+            <div class="grid-2-col layout-container">
+                <div class="content-column">
+                    <p><strong>Actor(es):</strong> Usuario invitado → Usuario autenticado</p>
+                    <p><strong>Objetivo:</strong> No perder los productos añadidos al carrito antes de iniciar sesión.
+                    </p>
+                    <p><strong>Funcionalidad implementada:</strong><br>Gestión de sesiones y lógica de fusión de
+                        carritos al autenticarse.</p>
+
+                    <div class="ra-block" style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 15px;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 10px;">Resultados de Aprendizaje:</h4>
+                        <ul class="clean-list">
+                            <li><span class="ra-tag">R2</span> Conoce diferentes arquitecturas o modelos software de
+                                comunicación.</li>
+                            <li><span class="ra-tag">R4</span> Diseña, implementa, valida y ofrece servicios web.</li>
+                        </ul>
                     </div>
                 </div>
-                <div>
-                    <div class="placeholder-img" data-img="capturas/cu5_pago.png">
-                        Captura real aquí (Checkout)<br>
-                        (no inventar)
+                <div class="image-column">
+                    <div class="placeholder-img">
+                        Captura real aquí (no inventar)
                     </div>
                 </div>
             </div>
+            <div class="slide-footer">Casos de Uso</div>
         </div>
 
+        <!-- CU5 -->
         <div class="slide" data-step="0">
-            <h2>Caso de Uso CU6: Historial de Compras</h2>
-            <div class="grid-2-col">
-                <div>
-                    <ul style="list-style: none; margin-left: 0;">
-                        <li><strong>Actor:</strong> Cliente Registrado</li>
-                        <li><strong>Objetivo:</strong> Consultar pedidos anteriores y su estado.</li>
-                        <li><strong>Funcionalidad:</strong> Consultas Eloquent complejas (Relaciones User -> Orders ->
-                            OrderItems).</li>
-                    </ul>
-                    <div style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px;">
-                        <strong>Resultados de Aprendizaje:</strong><br>
-                        <span class="ra-tag">R1</span> Relación elementos<br>
-                        <span class="ra-tag">R3</span> Uso de estándares
+            <h2>Caso de Uso CU5: Confirmación de compra y simulación de pago</h2>
+            <div class="grid-2-col layout-container">
+                <div class="content-column">
+                    <p><strong>Actor(es):</strong> Cliente autenticado</p>
+                    <p><strong>Objetivo:</strong> Finalizar una compra simulando una transacción segura.</p>
+                    <p><strong>Funcionalidad implementada:</strong><br>Checkout, validación de stock, transacciones
+                        atómicas en base de datos y generación de pedidos.</p>
+
+                    <div class="ra-block" style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 15px;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 10px;">Resultados de Aprendizaje:</h4>
+                        <ul class="clean-list">
+                            <li><span class="ra-tag">R4</span> Diseña, implementa, valida y ofrece servicios web.</li>
+                            <li><span class="ra-tag">R15</span> Aplica las competencias adquiridas en la realización de
+                                una tarea de forma autónoma.</li>
+                        </ul>
                     </div>
                 </div>
-                <div>
-                    <div class="placeholder-img" data-img="capturas/cu6_historial.png">
-                        Captura real aquí (Mis Pedidos)<br>
-                        (no inventar)
+                <div class="image-column">
+                    <div class="placeholder-img">
+                        Captura real aquí (no inventar)
                     </div>
                 </div>
             </div>
+            <div class="slide-footer">Casos de Uso</div>
         </div>
 
+        <!-- CU6 -->
         <div class="slide" data-step="0">
-            <h2>Caso de Uso CU7: API REST Sensores</h2>
-            <div class="grid-2-col">
-                <div>
-                    <ul style="list-style: none; margin-left: 0;">
-                        <li><strong>Actor:</strong> Sistema Externo / Postman</li>
-                        <li><strong>Objetivo:</strong> Inyectar mediciones de sensores IoT en el sistema.</li>
-                        <li><strong>Funcionalidad:</strong> API Routes, Controllers API, Respuestas JSON, Códigos HTTP.
-                        </li>
-                    </ul>
-                    <div style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px;">
-                        <strong>Resultados de Aprendizaje:</strong><br>
-                        <span class="ra-tag">R2</span> Arquitecturas software<br>
-                        <span class="ra-tag">R3</span> Protocolos (HTTP/JSON)<br>
-                        <span class="ra-tag">R4</span> Validar servicios web
+            <h2>Caso de Uso CU6: Consulta del historial de compras</h2>
+            <div class="grid-2-col layout-container">
+                <div class="content-column">
+                    <p><strong>Actor(es):</strong> Cliente registrado</p>
+                    <p><strong>Objetivo:</strong> Consultar pedidos anteriores y su estado.</p>
+                    <p><strong>Funcionalidad implementada:</strong><br>Consultas Eloquent con relaciones entre usuarios,
+                        pedidos y líneas de pedido.</p>
+
+                    <div class="ra-block" style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 15px;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 10px;">Resultados de Aprendizaje:</h4>
+                        <ul class="clean-list">
+                            <li><span class="ra-tag">R1</span> Comprende la relación entre los elementos estudiados.
+                            </li>
+                            <li><span class="ra-tag">R3</span> Conoce, distingue y utiliza diferentes tecnologías,
+                                lenguajes, protocolos y estándares propios de la computación web.</li>
+                        </ul>
                     </div>
                 </div>
-                <div>
-                    <div class="placeholder-img" data-img="capturas/cu7_api.png">
-                        Captura real aquí (Postman/JSON)<br>
-                        (no inventar)
+                <div class="image-column">
+                    <div class="placeholder-img">
+                        Captura real aquí (no inventar)
                     </div>
                 </div>
             </div>
+            <div class="slide-footer">Casos de Uso</div>
         </div>
 
+        <!-- CU7 -->
         <div class="slide" data-step="0">
-            <h2>Caso de Uso CU8: Formulario AJAX</h2>
-            <div class="grid-2-col">
-                <div>
-                    <ul style="list-style: none; margin-left: 0;">
-                        <li><strong>Actor:</strong> Administrador / Productor</li>
-                        <li><strong>Objetivo:</strong> Gestión de sensores sin recargar la página.</li>
-                        <li><strong>Funcionalidad:</strong> JavaScript `fetch()` o `XHR` contra la API REST propia.
-                            Manipulación del DOM.</li>
-                    </ul>
-                    <div style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px;">
-                        <strong>Resultados de Aprendizaje:</strong><br>
-                        <span class="ra-tag">R3</span> Tecnologías Web (JS Async)<br>
-                        <span class="ra-tag">R4</span> Implementación cliente-servidor
+            <h2>Caso de Uso CU7: Registro de sensores y mediciones mediante API REST</h2>
+            <div class="grid-2-col layout-container">
+                <div class="content-column">
+                    <p><strong>Actor(es):</strong> Sistema externo / Administrador técnico</p>
+                    <p><strong>Objetivo:</strong> Registrar sensores y enviar mediciones IoT al sistema.</p>
+                    <p><strong>Funcionalidad implementada:</strong><br>API REST en Laravel, rutas API, controladores,
+                        validación y respuestas JSON con códigos HTTP.</p>
+
+                    <div class="ra-block" style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 15px;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 10px;">Resultados de Aprendizaje:</h4>
+                        <ul class="clean-list">
+                            <li><span class="ra-tag">R2</span> Conoce diferentes arquitecturas o modelos software de
+                                comunicación.</li>
+                            <li><span class="ra-tag">R3</span> Conoce, distingue y utiliza diferentes tecnologías,
+                                lenguajes, protocolos y estándares propios de la computación web.</li>
+                            <li><span class="ra-tag">R4</span> Diseña, implementa, valida y ofrece servicios web.</li>
+                        </ul>
                     </div>
                 </div>
-                <div>
-                    <div class="placeholder-img" data-img="capturas/cu8_ajax.png">
-                        Captura real aquí (Formulario AJAX)<br>
-                        (no inventar)
+                <div class="image-column">
+                    <div class="placeholder-img">
+                        Captura real aquí (no inventar)
                     </div>
                 </div>
             </div>
+            <div class="slide-footer">Casos de Uso</div>
         </div>
 
+        <!-- CU8 -->
         <div class="slide" data-step="0">
-            <h2>Caso de Uso CU9: Gráficas de Sensores</h2>
-            <div class="grid-2-col">
-                <div>
-                    <ul style="list-style: none; margin-left: 0;">
-                        <li><strong>Actor:</strong> Usuario (Visualización de transparencia)</li>
-                        <li><strong>Objetivo:</strong> Ver evolución de temperatura/humedad de los cultivos.</li>
-                        <li><strong>Funcionalidad:</strong> Librería de gráficas (Chart.js o similar) alimentada por
-                            JSON dinámico.</li>
-                    </ul>
-                    <div style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px;">
-                        <strong>Resultados de Aprendizaje:</strong><br>
-                        <span class="ra-tag">R3</span> Tecnologías Web<br>
-                        <span class="ra-tag">R5</span> Interés por recursos TIC
+            <h2>Caso de Uso CU8: Visualización de datos de sensores</h2>
+            <div class="grid-2-col layout-container">
+                <div class="content-column">
+                    <p><strong>Actor(es):</strong> Usuario del portal</p>
+                    <p><strong>Objetivo:</strong> Visualizar gráficamente la evolución de datos de sensores para aportar
+                        transparencia y trazabilidad.</p>
+                    <p><strong>Funcionalidad implementada:</strong><br>Consumo de API REST, uso de librerías JavaScript
+                        de gráficos y actualización dinámica de datos.</p>
+
+                    <div class="ra-block" style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 15px;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 10px;">Resultados de Aprendizaje:</h4>
+                        <ul class="clean-list">
+                            <li><span class="ra-tag">R3</span> Conoce, distingue y utiliza diferentes tecnologías,
+                                lenguajes, protocolos y estándares propios de la computación web.</li>
+                            <li><span class="ra-tag">R5</span> Muestra interés por los recursos que ofrece la
+                                programación de las telecomunicaciones.</li>
+                        </ul>
                     </div>
                 </div>
-                <div>
-                    <div class="placeholder-img" data-img="capturas/cu9_grafica.png">
-                        Captura real aquí (Gráfica visual)<br>
-                        (no inventar)
+                <div class="image-column">
+                    <div class="placeholder-img">
+                        Captura real aquí (no inventar)
                     </div>
                 </div>
             </div>
+            <div class="slide-footer">Casos de Uso</div>
         </div>
 
         <div class="slide" data-step="0">
