@@ -1038,3 +1038,76 @@
                 transform: translateY(0);
             }
         }
+
+        /* Use Case Specific Styles - Refined */
+        .use-case-slide {
+            background-image: url('img/Fondo.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* White Card for Functional Content */
+        .use-case-info-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .use-case-info-card p {
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            color: #444;
+            display: flex;
+            /* Align label and text */
+        }
+
+        .use-case-info-card strong {
+            color: var(--primary-color);
+            font-weight: 700;
+            display: inline-block;
+            min-width: 130px;
+            /* Fixed width for labels alignment */
+            flex-shrink: 0;
+        }
+
+        /* Green Card for Learning Outcomes */
+        .ra-card {
+            background: #e8f5e9;
+            /* Light Green */
+            padding: 20px 25px;
+            border-radius: 12px;
+            border-left: 6px solid var(--primary-color);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .ra-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .ra-card ul.clean-list li {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            color: #2e7d32;
+        }
+
+        .ra-card .ra-tag {
+            background-color: var(--primary-color);
+            margin-right: 12px;
+            min-width: 45px;
+            text-align: center;
+            flex-shrink: 0;
+        }
