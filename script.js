@@ -48,10 +48,21 @@ function navigate(direction) {
 function updateSlideClasses() {
     slides.forEach((slide, index) => {
         slide.classList.remove('active', 'prev');
+        const video = slide.querySelector('video');
+
         if (index === currentSlideIndex) {
             slide.classList.add('active');
-        } else if (index < currentSlideIndex) {
-            slide.classList.add('prev');
+            if (video) {
+                video.currentTime = 0;
+                video.play().catch(e => console.warn("Auto-play prevented:", e));
+            }
+        } else {
+            if (video) {
+                video.pause();
+            }
+            if (index < currentSlideIndex) {
+                slide.classList.add('prev');
+            }
         }
     });
     progressBar.textContent = `${currentSlideIndex + 1} / ${totalSlides}`;

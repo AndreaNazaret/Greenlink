@@ -1086,6 +1086,9 @@
         /* Green Card for Learning Outcomes */
         .ra-card {
             background: #e8f5e9;
+            /* ... existing styles ... */
+
+
             /* Light Green */
             padding: 20px 25px;
             border-radius: 12px;
@@ -1118,4 +1121,14 @@
             min-width: 45px;
             text-align: center;
             flex-shrink: 0;
+        }
+
+        /* Video Styling for Use Cases */
+        .use-case-video {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background: #000;
         }
