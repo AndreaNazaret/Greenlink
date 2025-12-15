@@ -1132,3 +1132,16 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             background: #000;
         }
+
+        /* Custom Layout for CU1 (Video Focus) */
+        .video-focused-layout {
+            grid-template-columns: 35% 65% !important;
+            /* Force 35/65 specific ratio */
+        }
+
+        .video-focused-layout .use-case-video {
+            height: 500px;
+            /* Increase size significantly */
+            max-height: 65vh;
+            /* Keep it within viewport */
+        }
