@@ -320,6 +320,8 @@
         }
 
         /* Footer sutil */
+
+        /* Footer sutil */
         .slide-footer {
             position: absolute;
             bottom: 10px;
@@ -328,6 +330,138 @@
             font-size: 0.8rem;
             color: #999;
         }
+
+        /* Slide 1 Specific Styles */
+        /* Import Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        .cover-slide {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('img/Fondo verde difuso y suave.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            /* Flex centering from .flex-center is used, adding gap */
+            gap: 1.5rem;
+            z-index: 2;
+            /* Ensure on top */
+        }
+
+        /* Overlay to ensure contrast */
+        .cover-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.2);
+            /* Light overlay for freshness */
+            backdrop-filter: blur(2px);
+            /* Slight blur to whole bg if desired, or just clean */
+            z-index: -1;
+        }
+
+        /* Responsive Logo */
+        .cover-logo {
+            max-width: 220px;
+            /* Slightly larger as requested 'max-width: 180px' was previous, bumping for balance if needed, or stick to 180. User said 180 previously, but 'Logo mal centrado... visualmente desplazado'. Will stick to 180 but ensure centering. */
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        }
+
+        /* Typography overrides for Cover */
+        .cover-slide h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #1b5e20;
+            /* Deep Green */
+            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+            margin: 0;
+        }
+
+        .cover-slide h3 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: #2e7d32;
+            margin: 0;
+        }
+
+        .cover-context {
+            color: #555;
+            font-style: italic;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        /* Authors Glass Card */
+        .authors-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 2rem 4rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            text-align: center;
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .authors-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .group-title {
+            color: #1b5e20;
+            /* Dark Green */
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            border-bottom: 2px solid #81c784;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .author-name {
+            font-size: 1.2rem;
+            color: #2e7d32;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .author-name {
+            font-size: 1.2rem;
+            color: #2e7d32;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
     </style>
 </head>
 
@@ -335,19 +469,23 @@
 
     <div id="presentation-container">
 
-        <div class="slide active flex-center" data-step="0">
-            <div style="margin-bottom: 30px;">
-                <img src="img/logo.png" alt="Logo GreenLink" style="max-width: 180px; height: auto;">
-            </div>
-            <h1>GreenLink</h1>
-            <h3>Portal Web B2B/B2C de mercados ecológicos</h3>
-            <p style="margin-top: 20px; font-style: italic;">Proyecto Programación Web 2025–26</p>
-            <div style="margin-top: 40px; text-align: center;">
-                <p style="font-weight: bold; margin-bottom: 10px; font-size: 1.6rem; color: var(--text-dark);">Grupo Uno
-                </p>
-                <p style="margin-bottom: 5px; font-size: 1.3rem;">Andrea Nazaret González Maroto</p>
-                <p style="margin-bottom: 5px; font-size: 1.3rem;">Juan Antonio Pineda Sosa</p>
-                <p style="margin-bottom: 5px; font-size: 1.3rem;">Daniela Herrera Benítez</p>
+        <div class="slide active flex-center cover-slide" data-step="0">
+            <!-- Logo Container: Flex item, centered via gap in parent -->
+            <img src="img/logo.png" alt="Logo GreenLink" class="cover-logo" style="max-width: 180px;">
+
+            <!-- Titles -->
+            <h1 class="animate-up">GreenLink</h1>
+            <h3 class="animate-up" style="animation-delay: 0.1s;">Portal Web B2B/B2C de mercados ecológicos</h3>
+            <p class="cover-context animate-up" style="animation-delay: 0.2s;">Proyecto Programación Web 2025–26</p>
+
+            <!-- Authors Card -->
+            <div class="authors-card animate-up" style="animation-delay: 0.3s;">
+                <div style="display: flex; justify-content: center; width: 100%;">
+                    <span class="group-title">Grupo Uno</span>
+                </div>
+                <p class="author-name">Andrea Nazaret González Maroto</p>
+                <p class="author-name">Juan Antonio Pineda Sosa</p>
+                <p class="author-name">Daniela Herrera Benítez</p>
             </div>
         </div>
 
