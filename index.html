@@ -219,15 +219,22 @@
             <h2>Caso de Uso CU1: Alta e inicio de sesión de usuarios</h2>
             <div class="grid-2-col layout-container video-focused-layout">
                 <div class="content-column">
-                    <div class="use-case-info-card">
-                        <p><strong>Actor(es):</strong> Usuario no registrado / Usuario registrado</p>
-                        <p><strong>Objetivo:</strong> Crear una cuenta o iniciar sesión para acceder a funcionalidades
-                            personalizadas del portal.</p>
-                        <p><strong>Funcionalidad implementada:</strong> Sistema de autenticación con Laravel, validación
-                            de formularios y gestión de sesiones.</p>
+                    <div class="use-case-info-card compact">
+                        <div class="uc-actor-badge"><strong>Actor(es):</strong> Usuario no registrado / Usuario
+                            registrado</div>
+                        <div class="uc-block">
+                            <strong>Objetivo:</strong>
+                            <p>Crear una cuenta o iniciar sesión para acceder a funcionalidades personalizadas del
+                                portal.</p>
+                        </div>
+                        <div class="uc-block">
+                            <strong>Funcionalidad implementada:</strong>
+                            <p>Sistema de autenticación con Laravel, validación de formularios y gestión de sesiones.
+                            </p>
+                        </div>
                     </div>
 
-                    <div class="ra-card">
+                    <div class="ra-card compact">
                         <h4>Resultados de Aprendizaje:</h4>
                         <ul class="clean-list">
                             <li><span class="ra-tag">R3</span> Conoce, distingue y utiliza diferentes tecnologías,
@@ -250,15 +257,21 @@
             <h2>Caso de Uso CU2: Navegación por el catálogo y consulta de productos</h2>
             <div class="grid-2-col layout-container video-focused-layout">
                 <div class="content-column">
-                    <div class="use-case-info-card">
-                        <p><strong>Actor(es):</strong> Cualquier usuario (registrado o invitado)</p>
-                        <p><strong>Objetivo:</strong> Explorar los productos ecológicos disponibles y consultar su
-                            información detallada.</p>
-                        <p><strong>Funcionalidad implementada:</strong> Listado dinámico con vistas Blade, consultas a
-                            base de datos y vista de detalle de producto.</p>
+                    <div class="use-case-info-card compact">
+                        <div class="uc-actor-badge"><strong>Actor(es):</strong> Cualquier usuario (registrado o
+                            invitado)</div>
+                        <div class="uc-block">
+                            <strong>Objetivo:</strong>
+                            <p>Explorar los productos ecológicos disponibles y consultar su información detallada.</p>
+                        </div>
+                        <div class="uc-block">
+                            <strong>Funcionalidad implementada:</strong>
+                            <p>Listado dinámico con vistas Blade, consultas a base de datos y vista de detalle de
+                                producto.</p>
+                        </div>
                     </div>
 
-                    <div class="ra-card">
+                    <div class="ra-card compact">
                         <h4>Resultados de Aprendizaje:</h4>
                         <ul class="clean-list">
                             <li><span class="ra-tag">R1</span> Comprende la relación entre los elementos estudiados.
@@ -282,15 +295,20 @@
             <h2>Caso de Uso CU3: Gestión de entidades del sistema (CRUD)</h2>
             <div class="grid-2-col layout-container">
                 <div class="content-column">
-                    <div class="use-case-info-card">
-                        <p><strong>Actor(es):</strong> Administrador / Gestión interna</p>
-                        <p><strong>Objetivo:</strong> Crear, modificar y eliminar entidades del dominio (productos,
-                            usuarios, productores, vendedores).</p>
-                        <p><strong>Funcionalidad implementada:</strong> Controladores MVC, modelos Eloquent, migraciones
-                            y seeders.</p>
+                    <div class="use-case-info-card compact">
+                        <div class="uc-actor-badge"><strong>Actor(es):</strong> Administrador / Gestión interna</div>
+                        <div class="uc-block">
+                            <strong>Objetivo:</strong>
+                            <p>Crear, modificar y eliminar entidades del dominio (productos, usuarios, productores,
+                                vendedores).</p>
+                        </div>
+                        <div class="uc-block">
+                            <strong>Funcionalidad implementada:</strong>
+                            <p>Controladores MVC, modelos Eloquent, migraciones y seeders.</p>
+                        </div>
                     </div>
 
-                    <div class="ra-card">
+                    <div class="ra-card compact">
                         <h4>Resultados de Aprendizaje:</h4>
                         <ul class="clean-list">
                             <li><span class="ra-tag">R1</span> Comprende la relación entre los elementos estudiados.
@@ -302,9 +320,9 @@
                     </div>
                 </div>
                 <div class="image-column">
-                    <div class="placeholder-img">
-                        Captura real aquí (no inventar)
-                    </div>
+                    <video class="use-case-video" src="video/CU3.mp4" muted loop playsinline>
+                        Tu navegador no soporta video.
+                    </video>
                 </div>
             </div>
             <div class="slide-footer">Casos de Uso</div>
@@ -313,17 +331,22 @@
         <!-- CU4 -->
         <div class="slide use-case-slide" data-step="0">
             <h2>Caso de Uso CU4: Compra como invitado y fusión de carrito</h2>
-            <div class="grid-2-col layout-container">
+            <div class="grid-2-col layout-container video-focused-layout">
                 <div class="content-column">
-                    <div class="use-case-info-card">
-                        <p><strong>Actor(es):</strong> Usuario invitado → Usuario autenticado</p>
-                        <p><strong>Objetivo:</strong> No perder los productos añadidos al carrito antes de iniciar
-                            sesión.</p>
-                        <p><strong>Funcionalidad implementada:</strong> Gestión de sesiones y lógica de fusión de
-                            carritos al autenticarse.</p>
+                    <div class="use-case-info-card compact">
+                        <div class="uc-actor-badge"><strong>Actor(es):</strong> Usuario invitado → Usuario autenticado
+                        </div>
+                        <div class="uc-block">
+                            <strong>Objetivo:</strong>
+                            <p>No perder los productos añadidos al carrito antes de iniciar sesión.</p>
+                        </div>
+                        <div class="uc-block">
+                            <strong>Funcionalidad implementada:</strong>
+                            <p>Gestión de sesiones y lógica de fusión de carritos al autenticarse.</p>
+                        </div>
                     </div>
 
-                    <div class="ra-card">
+                    <div class="ra-card compact">
                         <h4>Resultados de Aprendizaje:</h4>
                         <ul class="clean-list">
                             <li><span class="ra-tag">R2</span> Conoce diferentes arquitecturas o modelos software de
@@ -333,9 +356,9 @@
                     </div>
                 </div>
                 <div class="image-column">
-                    <div class="placeholder-img">
-                        Captura real aquí (no inventar)
-                    </div>
+                    <video class="use-case-video" src="video/CU4.mp4" muted loop playsinline>
+                        Tu navegador no soporta video.
+                    </video>
                 </div>
             </div>
             <div class="slide-footer">Casos de Uso</div>
@@ -344,16 +367,22 @@
         <!-- CU5 -->
         <div class="slide use-case-slide" data-step="0">
             <h2>Caso de Uso CU5: Confirmación de compra y simulación de pago</h2>
-            <div class="grid-2-col layout-container">
+            <div class="grid-2-col layout-container video-focused-layout">
                 <div class="content-column">
-                    <div class="use-case-info-card">
-                        <p><strong>Actor(es):</strong> Cliente autenticado</p>
-                        <p><strong>Objetivo:</strong> Finalizar una compra simulando una transacción segura.</p>
-                        <p><strong>Funcionalidad implementada:</strong> Checkout, validación de stock, transacciones
-                            atómicas en base de datos y generación de pedidos.</p>
+                    <div class="use-case-info-card compact">
+                        <div class="uc-actor-badge"><strong>Actor(es):</strong> Cliente autenticado</div>
+                        <div class="uc-block">
+                            <strong>Objetivo:</strong>
+                            <p>Finalizar una compra simulando una transacción segura.</p>
+                        </div>
+                        <div class="uc-block">
+                            <strong>Funcionalidad implementada:</strong>
+                            <p>Checkout, validación de stock, transacciones atómicas en base de datos y generación de
+                                pedidos.</p>
+                        </div>
                     </div>
 
-                    <div class="ra-card">
+                    <div class="ra-card compact">
                         <h4>Resultados de Aprendizaje:</h4>
                         <ul class="clean-list">
                             <li><span class="ra-tag">R4</span> Diseña, implementa, valida y ofrece servicios web.</li>
@@ -363,9 +392,9 @@
                     </div>
                 </div>
                 <div class="image-column">
-                    <div class="placeholder-img">
-                        Captura real aquí (no inventar)
-                    </div>
+                    <video class="use-case-video" src="video/CU5.mp4" muted loop playsinline>
+                        Tu navegador no soporta video.
+                    </video>
                 </div>
             </div>
             <div class="slide-footer">Casos de Uso</div>
@@ -374,16 +403,23 @@
         <!-- CU6 -->
         <div class="slide use-case-slide" data-step="0">
             <h2>Caso de Uso CU6: Registro de sensores y mediciones mediante API REST</h2>
-            <div class="grid-2-col layout-container">
+            <div class="grid-2-col layout-container video-focused-layout">
                 <div class="content-column">
-                    <div class="use-case-info-card">
-                        <p><strong>Actor(es):</strong> Sistema externo / Administrador técnico</p>
-                        <p><strong>Objetivo:</strong> Registrar sensores y enviar mediciones IoT al sistema.</p>
-                        <p><strong>Funcionalidad implementada:</strong> API REST en Laravel, rutas API, controladores,
-                            validación y respuestas JSON con códigos HTTP.</p>
+                    <div class="use-case-info-card compact">
+                        <div class="uc-actor-badge"><strong>Actor(es):</strong> Sistema externo / Administrador técnico
+                        </div>
+                        <div class="uc-block">
+                            <strong>Objetivo:</strong>
+                            <p>Registrar sensores y enviar mediciones IoT al sistema.</p>
+                        </div>
+                        <div class="uc-block">
+                            <strong>Funcionalidad implementada:</strong>
+                            <p>API REST en Laravel, rutas API, controladores, validación y respuestas JSON con códigos
+                                HTTP.</p>
+                        </div>
                     </div>
 
-                    <div class="ra-card">
+                    <div class="ra-card compact">
                         <h4>Resultados de Aprendizaje:</h4>
                         <ul class="clean-list">
                             <li><span class="ra-tag">R2</span> Conoce diferentes arquitecturas o modelos software de
@@ -395,9 +431,9 @@
                     </div>
                 </div>
                 <div class="image-column">
-                    <div class="placeholder-img">
-                        Captura real aquí (no inventar)
-                    </div>
+                    <video class="use-case-video" src="video/CU6.mp4" muted loop playsinline>
+                        Tu navegador no soporta video.
+                    </video>
                 </div>
             </div>
             <div class="slide-footer">Casos de Uso</div>
@@ -406,17 +442,23 @@
         <!-- CU7 -->
         <div class="slide use-case-slide" data-step="0">
             <h2>Caso de Uso CU7: Visualización de datos de sensores</h2>
-            <div class="grid-2-col layout-container">
+            <div class="grid-2-col layout-container video-focused-layout">
                 <div class="content-column">
-                    <div class="use-case-info-card">
-                        <p><strong>Actor(es):</strong> Usuario del portal</p>
-                        <p><strong>Objetivo:</strong> Visualizar gráficamente la evolución de datos de sensores para
-                            aportar transparencia y trazabilidad.</p>
-                        <p><strong>Funcionalidad implementada:</strong> Consumo de API REST, uso de librerías JavaScript
-                            de gráficos y actualización dinámica de datos.</p>
+                    <div class="use-case-info-card compact">
+                        <div class="uc-actor-badge"><strong>Actor(es):</strong> Usuario del portal</div>
+                        <div class="uc-block">
+                            <strong>Objetivo:</strong>
+                            <p>Visualizar gráficamente la evolución de datos de sensores para aportar transparencia y
+                                trazabilidad.</p>
+                        </div>
+                        <div class="uc-block">
+                            <strong>Funcionalidad implementada:</strong>
+                            <p>Consumo de API REST, uso de librerías JavaScript de gráficos y actualización dinámica de
+                                datos.</p>
+                        </div>
                     </div>
 
-                    <div class="ra-card">
+                    <div class="ra-card compact">
                         <h4>Resultados de Aprendizaje:</h4>
                         <ul class="clean-list">
                             <li><span class="ra-tag">R3</span> Conoce, distingue y utiliza diferentes tecnologías,
@@ -427,9 +469,9 @@
                     </div>
                 </div>
                 <div class="image-column">
-                    <div class="placeholder-img">
-                        Captura real aquí (no inventar)
-                    </div>
+                    <video class="use-case-video" src="video/CU7.mp4" muted loop playsinline>
+                        Tu navegador no soporta video.
+                    </video>
                 </div>
             </div>
             <div class="slide-footer">Casos de Uso</div>
@@ -487,9 +529,15 @@
             </div>
         </div>
 
-        <div class="slide flex-center" data-step="0">
-            <h1>¿Preguntas?</h1>
-            <p>Gracias por su atención.</p>
+        <div class="slide cover-slide flex-center" data-step="0">
+            <div class="card" style="text-align: center; padding: 40px 60px;">
+                <h1 style="color: var(--primary-color); margin-bottom: 20px;">¿Preguntas?</h1>
+                <p style="font-size: 1.5rem; color: #555;">Gracias por su atención.</p>
+                <div
+                    style="margin-top: 30px; font-size: 0.9rem; color: #888; border-top: 1px solid #eee; padding-top: 15px;">
+                    Diapositivas desarrolladas con Google Antigravity empleando Gemini Pro 3
+                </div>
+            </div>
         </div>
 
         <div id="progress-bar">1 / 17</div>

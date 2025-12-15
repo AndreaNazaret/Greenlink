@@ -1058,29 +1058,64 @@
         }
 
         .use-case-info-card p {
-            margin-bottom: 12px;
-            font-size: 1.05rem;
-            line-height: 1.5;
+            margin-bottom: 5px;
+            /* Reduced margin */
+            font-size: 1rem;
+            line-height: 1.4;
             color: #444;
-            display: flex;
-            /* Flex layout for label + value */
-            align-items: flex-start;
-            /* Ensure top alignment for multi-line text */
+            /* display: flex; REMOVE FLEX - Stacked layout */
             text-align: left;
-            /* Explicitly force left alignment */
         }
 
-        .use-case-info-card strong {
+        .use-case-info-card.compact {
+            padding: 20px;
+            /* Reduced padding */
+        }
+
+        .uc-actor-badge {
+            display: inline-block;
+            background: #e3f2fd;
+            color: var(--primary-color);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            border: 1px solid #bbdefb;
+        }
+
+        .uc-block {
+            margin-bottom: 15px;
+        }
+
+        .uc-block strong {
+            display: block;
             color: var(--primary-color);
             font-weight: 700;
-            display: block;
-            /* Block behavior within flex item */
-            min-width: 240px;
-            /* Increased width to accommodate "Funcionalidad implementada:" without wrap */
-            margin-right: 15px;
-            /* Minimal gap */
-            flex-shrink: 0;
-            /* Prevent label shrinking */
+            margin-bottom: 3px;
+            font-size: 0.95rem;
+        }
+
+        /* Compact RA Card */
+        .ra-card.compact {
+            padding: 15px 20px;
+        }
+
+        .ra-card.compact h4 {
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .ra-card.compact ul.clean-list li {
+            margin-bottom: 6px;
+        }
+
+        /* 
+           Keep original strong rule for backward compatibility 
+           if needed, or override it. 
+           The new HTML structure uses .uc-block strong, so we don't need the old .use-case-info-card strong rule interfering.
+        */
+        .use-case-info-card strong {
+            /* Reset or keep minimal */
         }
 
         /* Green Card for Learning Outcomes */
