@@ -1063,16 +1063,24 @@
             line-height: 1.5;
             color: #444;
             display: flex;
-            /* Align label and text */
+            /* Flex layout for label + value */
+            align-items: flex-start;
+            /* Ensure top alignment for multi-line text */
+            text-align: left;
+            /* Explicitly force left alignment */
         }
 
         .use-case-info-card strong {
             color: var(--primary-color);
             font-weight: 700;
-            display: inline-block;
-            min-width: 130px;
-            /* Fixed width for labels alignment */
+            display: block;
+            /* Block behavior within flex item */
+            min-width: 240px;
+            /* Increased width to accommodate "Funcionalidad implementada:" without wrap */
+            margin-right: 15px;
+            /* Minimal gap */
             flex-shrink: 0;
+            /* Prevent label shrinking */
         }
 
         /* Green Card for Learning Outcomes */
