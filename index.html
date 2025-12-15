@@ -337,15 +337,14 @@
 
         .cover-slide {
             font-family: 'Poppins', sans-serif;
-            background-image: url('img/Fondo verde difuso y suave.png');
+            background-image: url('img/Fondo.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             position: relative;
             /* Flex centering from .flex-center is used, adding gap */
             gap: 1.5rem;
-            z-index: 2;
-            /* Ensure on top */
+            /* z-index removed to avoid conflict with .slide stacking context */
         }
 
         /* Overlay to ensure contrast */
@@ -458,9 +457,13 @@
             }
         }
 
+        /* Animations triggered only when slide is active to ensure visibility */
         .animate-up {
-            animation: fadeInUp 0.8s ease-out forwards;
             opacity: 0;
+        }
+
+        .slide.active .animate-up {
+            animation: fadeInUp 0.8s ease-out forwards;
         }
 
         /* Index Slide Specifics */
