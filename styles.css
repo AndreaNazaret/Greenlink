@@ -62,10 +62,11 @@
         }
 
         .slide.active {
-            opacity: 1;
-            transform: translateX(0);
+            opacity: 1 !important;
+            transform: translateX(0) !important;
             pointer-events: all;
             z-index: 2;
+            visibility: visible !important;
         }
 
         .slide.prev {
