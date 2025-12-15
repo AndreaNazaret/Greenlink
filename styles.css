@@ -694,3 +694,129 @@
         .main-image:hover {
             transform: scale(1.02);
         }
+
+        /* Restrictions Slide - Flip Cards */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 2rem;
+            perspective: 1000px;
+            /* Essential for 3D effect */
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 380px;
+            /* Fixed height for consistency */
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+        }
+
+        /* Flipped state */
+        .flip-card-inner.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            /* Opaque white */
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .flip-card-front {
+            z-index: 2;
+        }
+
+        .flip-card-back {
+            background: #f8fcf8;
+            /* Slightly greener tint for back */
+            transform: rotateY(180deg);
+            padding: 30px;
+            align-items: flex-start;
+            text-align: left;
+            border: 1px solid var(--accent-color);
+        }
+
+        /* Front specific styles */
+        .icon-wrapper {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .flip-card-front h4 {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .clean-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 30px 0;
+            margin-left: 0;
+            /* Override generic ul margin */
+        }
+
+        .clean-list li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #555;
+            position: relative;
+        }
+
+        .click-hint {
+            margin-top: auto;
+            font-size: 0.85rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-top: 1px solid #eee;
+            width: 80%;
+            padding-top: 10px;
+        }
+
+        /* Back specific styles */
+        .flip-card-back h4 {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            width: 100%;
+            display: block;
+            /* Override generic h2 inline-block */
+        }
+
+        .flip-card-back ul {
+            margin-left: 20px;
+            text-align: left;
+        }
+
+        .flip-card-back li {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }

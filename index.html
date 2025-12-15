@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        <div class="slide what-is-slide" data-step="0">
+        <div class="slide cover-slide what-is-slide" data-step="0">
             <div class="header-section">
                 <h2>¿Qué es nuestro portal web?</h2>
             </div>
@@ -128,29 +128,105 @@
             <div class="slide-footer">Introducción</div>
         </div>
 
-        <div class="slide" data-step="0">
-            <h2>Restricciones y Especificaciones</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 30px;">
-                <div class="card fragment" style="flex: 1 1 300px;">
-                    <h4>Backend & BD</h4>
-                    <p style="font-size: 1rem;">Framework <strong>Laravel</strong> (MVC).<br>Uso de Eloquent
-                        ORM.<br>Base de datos MySQL (Relacional).</p>
+        <div class="slide cover-slide" data-step="0">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Restricciones y Especificaciones</h2>
+            <div class="flip-grid">
+
+                <!-- Card 1: Backend -->
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="icon-wrapper">🛠️</div>
+                            <h4>Backend & BD</h4>
+                            <ul class="clean-list">
+                                <li>Laravel (MVC)</li>
+                                <li>Eloquent ORM</li>
+                                <li>MySQL (Relacional)</li>
+                            </ul>
+                            <div class="click-hint">Click para detalle</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <h4>Backend & BD</h4>
+                            <p><strong>Detalle:</strong></p>
+                            <ul>
+                                <li>Arquitectura MVC y separación de responsabilidades.</li>
+                                <li>Persistencia relacional con entidades y relaciones del dominio.</li>
+                                <li>Uso de migraciones y seeders.</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <div class="card fragment" style="flex: 1 1 300px;">
-                    <h4>Frontend</h4>
-                    <p style="font-size: 1rem;">HTML5, CSS3, JavaScript nativo.<br>Tecnología <strong>AJAX</strong> para
-                        actualización asíncrona de sensores.</p>
+
+                <!-- Card 2: Frontend -->
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="icon-wrapper">🎨</div>
+                            <h4>Frontend</h4>
+                            <ul class="clean-list">
+                                <li>HTML5, CSS3, JS</li>
+                                <li>Interacción (AJAX)</li>
+                            </ul>
+                            <div class="click-hint">Click para detalle</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <h4>Frontend</h4>
+                            <p><strong>Detalle:</strong></p>
+                            <ul>
+                                <li>Actualización asíncrona de datos de sensores con fetch/AJAX.</li>
+                                <li>Buenas prácticas de UI: consistencia, jerarquía visual y accesibilidad.</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <div class="card fragment" style="flex: 1 1 300px;">
-                    <h4>Integración IoT</h4>
-                    <p style="font-size: 1rem;">API REST para recepción de datos.<br>Formato JSON y validaciones
-                        estrictas.</p>
+
+                <!-- Card 3: IoT -->
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="icon-wrapper">📡</div>
+                            <h4>Integración IoT</h4>
+                            <ul class="clean-list">
+                                <li>API REST</li>
+                                <li>JSON + Validaciones</li>
+                            </ul>
+                            <div class="click-hint">Click para detalle</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <h4>Integración IoT</h4>
+                            <p><strong>Detalle:</strong></p>
+                            <ul>
+                                <li>Endpoints REST para recepción y consulta de datos.</li>
+                                <li>Validaciones estrictas y formato JSON.</li>
+                                <li>Enfoque en trazabilidad en tiempo real.</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <div class="card fragment" style="flex: 1 1 300px;">
-                    <h4>E-Commerce & Legal</h4>
-                    <p style="font-size: 1rem;">Carrito, Checkout, Stock.<br>Cumplimiento RGPD, Cookies y Aviso Legal.
-                    </p>
+
+                <!-- Card 4: E-Commerce -->
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="icon-wrapper">🛒</div>
+                            <h4>E-Commerce & Legal</h4>
+                            <ul class="clean-list">
+                                <li>Carrito / Checkout</li>
+                                <li>RGPD / Avisos</li>
+                            </ul>
+                            <div class="click-hint">Click para detalle</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <h4>E-Commerce & Legal</h4>
+                            <p><strong>Detalle:</strong></p>
+                            <ul>
+                                <li>Flujo de compra completo y control de stock.</li>
+                                <li>Cumplimiento de normativa legal: privacidad, cookies y aviso legal.</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
+
             </div>
             <div class="slide-footer">Especificaciones Técnicas</div>
         </div>

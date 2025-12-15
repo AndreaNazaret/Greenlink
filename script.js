@@ -123,3 +123,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+
+// Interaction for "Restrictions" Slide (Flip Cards)
+document.addEventListener('DOMContentLoaded', () => {
+    const flipCards = document.querySelectorAll('.flip-card');
+
+    flipCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            // Prevent slide navigation if click is inside card (if nav was click-based, but here distinct)
+            e.stopPropagation();
+            const inner = card.querySelector('.flip-card-inner');
+            if (inner) {
+                inner.classList.toggle('is-flipped');
+            }
+        });
+    });
+});
