@@ -616,7 +616,10 @@
             border-radius: 8px;
             font-weight: 600;
             font-size: 0.9rem;
-            margin-top: 15px;
+            margin-bottom: 20px;
+            /* Moved above image, so margin-bottom */
+            align-self: center;
+            /* Center horizontally in flex column */
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
@@ -680,6 +683,8 @@
         /* Image Column */
         .image-column {
             display: flex;
+            flex-direction: column;
+            /* Ensure vertical stocking */
             justify-content: center;
             align-items: center;
             height: 100%;
@@ -941,6 +946,45 @@
             margin-bottom: 15px;
             border-bottom: 2px solid var(--accent-color);
             padding-bottom: 15px;
+        }
+
+        /* Nav Buttons */
+        .nav-arrow-btn {
+            position: absolute;
+            bottom: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            color: var(--primary-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(5px);
+            z-index: 20;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-arrow-btn:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-arrow-btn:active {
+            transform: scale(0.95);
+        }
+
+        #prev-slide-btn {
+            left: 20px;
+        }
+
+        #next-slide-btn {
+            right: 120px;
+            /* Leave space for progress bar */
         }
 
         .detail-summary {

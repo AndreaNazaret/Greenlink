@@ -173,3 +173,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+// Navigation Buttons Logic
+document.addEventListener('DOMContentLoaded', () => {
+    const prevBtn = document.getElementById('prev-slide-btn');
+    const nextBtn = document.getElementById('next-slide-btn');
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            navigate('prev');
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            navigate('next');
+        });
+    }
+});
