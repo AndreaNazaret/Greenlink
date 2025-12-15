@@ -394,15 +394,20 @@
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            padding: 2rem 4rem;
+            padding: 1rem 3rem;
+            /* Reduced padding */
             border-radius: 20px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.4);
             text-align: center;
-            margin-top: 2rem;
+            margin-top: 0.5rem;
+            /* Pulled up */
+            margin-bottom: 3rem;
+            /* Clearance for arrows */
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 5px;
+            /* Tighter gap */
             transition: transform 0.3s ease;
         }
 
@@ -424,7 +429,8 @@
         }
 
         .author-name {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            /* Slightly smaller */
             color: #2e7d32;
             font-weight: 500;
             margin: 0;
