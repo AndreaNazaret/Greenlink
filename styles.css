@@ -542,7 +542,7 @@
 
         .info-group {
             margin-bottom: 30px;
-            background: rgba(46, 125, 50, 0.05);
+            background: rgba(123, 145, 124, 0.341);
             /* Light green tint */
             padding: 20px;
             border-radius: 12px;
@@ -820,4 +820,149 @@
             font-size: 0.95rem;
             margin-bottom: 8px;
             line-height: 1.4;
+        }
+
+        /* Functionalities Slide (Slide 5) */
+        .feature-container {
+            display: flex;
+            gap: 40px;
+            height: 100%;
+            align-items: flex-start;
+            padding-top: 20px;
+        }
+
+        .feature-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.85);
+            /* White glassy */
+            padding: 15px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card.is-active {
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.95);
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.2);
+        }
+
+        .f-icon {
+            font-size: 2rem;
+            /* width: 50px; text-align: center; */
+        }
+
+        .f-text h4 {
+            font-size: 1.1rem;
+            margin: 0 0 4px 0;
+            color: var(--primary-color);
+            border: none;
+            /* Override generic h2/h4 borders */
+            display: block;
+        }
+
+        .f-text p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #666;
+            line-height: 1.3;
+        }
+
+        .feature-detail-panel {
+            flex: 0.8;
+            /* Slightly smaller than grid */
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 16px;
+            /* height: 100%; */
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .detail-placeholder {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+        }
+
+        .detail-content {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .detail-content.active {
+            display: block;
+        }
+
+        .detail-content h3 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 15px;
+        }
+
+        .detail-summary {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .detail-list {
+            list-style: none;
+            /* Custom bullets */
+            padding-left: 0;
+        }
+
+        .detail-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            color: #444;
+        }
+
+        .detail-list li::before {
+            content: '✔';
+            /* Or custom bullet */
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }

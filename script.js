@@ -140,3 +140,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+
+// Interaction for "Functionalities" Slide (Slide 5)
+document.addEventListener('DOMContentLoaded', () => {
+    const featureCards = document.querySelectorAll('.feature-card');
+    const placeholder = document.querySelector('.detail-placeholder');
+    const allDetails = document.querySelectorAll('.detail-content');
+
+    featureCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            // Stop propagation to prevent navigation
+            e.stopPropagation();
+
+            const featureId = card.getAttribute('data-feature');
+
+            // 1. Highlight Card
+            featureCards.forEach(c => c.classList.remove('is-active'));
+            card.classList.add('is-active');
+
+            // 2. Show Detail
+            if (placeholder) placeholder.style.display = 'none'; // Hide placeholder once interacted
+
+            // Hide all details
+            allDetails.forEach(d => d.classList.remove('active'));
+
+            // Show target
+            const targetDetail = document.getElementById(`detail-${featureId}`);
+            if (targetDetail) {
+                targetDetail.classList.add('active');
+            }
+        });
+    });
+});
