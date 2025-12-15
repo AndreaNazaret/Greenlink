@@ -605,6 +605,21 @@
             width: fit-content;
         }
 
+        .ods-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #cd9330;
+            /* ODS 12 color approx */
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
         .model-btn {
             border: none;
             background: transparent;
@@ -696,20 +711,23 @@
             transform: scale(1.02);
         }
 
-        /* Restrictions Slide - Flip Cards */
+        /* Restrictions/Specs/Func Slide - Flip Cards */
         .flip-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
+            /* Changed to 3 columns */
             gap: 30px;
-            margin-top: 2rem;
+            margin-top: 1.5rem;
             perspective: 1000px;
-            /* Essential for 3D effect */
+            height: 100%;
+            /* Ensure full height usage */
+            align-content: center;
         }
 
         .flip-card {
             background-color: transparent;
-            height: 380px;
-            /* Fixed height for consistency */
+            height: 420px;
+            /* Increased height for content */
             cursor: pointer;
         }
 
