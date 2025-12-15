@@ -75,31 +75,53 @@
             </div>
         </div>
 
-        <div class="slide" data-step="0">
-            <h2>¿Qué es nuestro portal web?</h2>
-            <div class="grid-2-col">
-                <div>
-                    <h3>GreenLink</h3>
-                    <p>Es un portal web híbrido que unifica el comercio ecológico.</p>
-                    <ul style="margin-top: 20px;">
-                        <li class="fragment"><strong>Para quién:</strong> Productores locales, Vendedores minoristas y
-                            Clientes finales.</li>
-                        <li class="fragment"><strong>Valor aportado:</strong> Marketplace unificado + Transparencia
-                            total mediante trazabilidad IoT.</li>
-                    </ul>
-                </div>
-                <div style="background: var(--bg-color); padding: 30px; border-radius: 10px;">
-                    <h3 style="text-align: center; color: var(--primary-color);">Modelo Mixto</h3>
-                    <hr style="margin: 15px 0; border: 0; border-top: 1px solid #ccc;">
-                    <div class="fragment">
-                        <h4>B2B (Business to Business)</h4>
-                        <p style="font-size: 1rem;">Conecta productores con vendedores. Gestión de grandes volúmenes,
-                            stock y logística.</p>
+        <div class="slide what-is-slide" data-step="0">
+            <div class="header-section">
+                <h2>¿Qué es nuestro portal web?</h2>
+            </div>
+
+            <div class="grid-2-col layout-container">
+                <!-- Left Column: Content -->
+                <div class="content-column">
+                    <h3 class="highlight-title">GreenLink</h3>
+                    <p class="subtitle">Es un portal web híbrido que unifica el comercio ecológico.</p>
+
+                    <div class="info-group">
+                        <div class="info-item">
+                            <span class="info-label">Para quién:</span>
+                            Productores locales, Vendedores minoristas y Clientes finales.
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Valor aportado:</span>
+                            Marketplace unificado + Transparencia total mediante trazabilidad IoT.
+                        </div>
                     </div>
-                    <div class="fragment" style="margin-top: 20px;">
-                        <h4>B2C (Business to Consumer)</h4>
-                        <p style="font-size: 1rem;">Permite al cliente final comprar productos ecológicos certificados y
-                            ver su origen en tiempo real.</p>
+
+                    <div class="interactive-section">
+                        <h3 class="interactive-title">Modelo Mixto <span class="hint">Click para ver</span></h3>
+                        <div class="model-buttons">
+                            <button class="model-btn active" data-target="b2b">B2B</button>
+                            <button class="model-btn" data-target="b2c">B2C</button>
+                        </div>
+                        <div class="model-content">
+                            <div id="b2b" class="model-pane active">
+                                <h4>Business to Business</h4>
+                                <p>Conecta productores con vendedores. Gestión de grandes volúmenes, stock y logística.
+                                </p>
+                            </div>
+                            <div id="b2c" class="model-pane">
+                                <h4>Business to Consumer</h4>
+                                <p>Permite al cliente final comprar productos ecológicos certificados y ver su origen en
+                                    tiempo real.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Image -->
+                <div class="image-column">
+                    <div class="image-container">
+                        <img src="img/ecosystem_diagram.png" alt="Ecosistema GreenLink" class="main-image">
                     </div>
                 </div>
             </div>
