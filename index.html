@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Presentación GreenLink - Proyecto Web 2025-26</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -16,7 +17,7 @@
             <img src="img/logo.png" alt="Logo GreenLink" class="cover-logo" style="max-width: 180px;">
 
             <h1 class="animate-up">GreenLink</h1>
-            <h3 class="animate-up" style="animation-delay: 0.1s;">Portal Web B2B/B2C de mercados ecológicos</h3>
+            <h3 class="animate-up" style="animation-delay: 0.1s;">Portal Web de mercados ecológicos</h3>
             <p class="cover-context animate-up" style="animation-delay: 0.2s;">Proyecto Programación Web 2025–26</p>
 
             <div class="authors-card animate-up" style="animation-delay: 0.3s;">
@@ -24,8 +25,8 @@
                     <span class="group-title">Grupo Uno</span>
                 </div>
                 <p class="author-name">Andrea Nazaret González Maroto</p>
-                <p class="author-name">Juan Antonio Pineda Sosa</p>
                 <p class="author-name">Daniela Herrera Benítez</p>
+                <p class="author-name">Juan Antonio Pineda Sosa</p>
             </div>
         </div>
 
@@ -257,15 +258,17 @@
             <h2>Caso de Uso CU1 — Implementación Técnica</h2>
             <div class="tech-impl-container">
                 <div class="tech-nav-column">
-                    <button class="tech-nav-btn active">Controlador</button>
-                    <button class="tech-nav-btn">Vista (Blade)</button>
-                    <button class="tech-nav-btn">Modelo / Eloquent</button>
-                    <button class="tech-nav-btn">Ruta</button>
-                    <button class="tech-nav-btn">JS / AJAX</button>
-                    <button class="tech-nav-btn">Validaciones</button>
+                    <button class="tech-nav-btn active" data-tab="controller">Controlador</button>
+                    <button class="tech-nav-btn" data-tab="view">Vista principal</button>
+
+                    <div class="breeze-note">
+                        <strong>Nota:</strong> Autenticación gestionada con <em>Laravel Breeze</em>. Las rutas de
+                        login/registro/logout pertenecen al scaffolding interno de Breeze.
+                    </div>
                 </div>
-                <div class="code-panel">
-                    (Aquí se mostrará el código en el siguiente paso)
+                <!-- Added id="cu1-code-panel" for specific targeting behavior if needed, but mainly targeting pre > code inside -->
+                <div class="code-panel" id="cu1-code-panel">
+                    <pre><code id="cu1-code-block" class="language-php"></code></pre>
                 </div>
             </div>
             <div class="slide-footer">Implementación Técnica</div>
@@ -665,6 +668,10 @@
 
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup-templating.min.js"></script>
     <script src="script.js"></script>
 
 </body>
