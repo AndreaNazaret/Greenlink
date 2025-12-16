@@ -501,15 +501,19 @@
             <h2>Caso de Uso CU5 — Implementación Técnica</h2>
             <div class="tech-impl-container">
                 <div class="tech-nav-column">
-                    <button class="tech-nav-btn active">Controlador</button>
-                    <button class="tech-nav-btn">Vista (Blade)</button>
-                    <button class="tech-nav-btn">Modelo / Eloquent</button>
-                    <button class="tech-nav-btn">Ruta</button>
-                    <button class="tech-nav-btn">JS / AJAX</button>
-                    <button class="tech-nav-btn">Validaciones</button>
+                    <button class="tech-nav-btn active" data-tab="cu5-routes">Rutas API</button>
+                    <button class="tech-nav-btn" data-tab="cu5-controller">SensorApiController</button>
+                    <button class="tech-nav-btn" data-tab="cu5-request">SensorStoreRequest</button>
+                    <button class="tech-nav-btn" data-tab="cu5-resource">SensorResource</button>
+
+                    <div class="breeze-note">
+                        <strong>Nota:</strong>
+                        La API aplica validación desacoplada (FormRequest) y normaliza la salida (Resource),
+                        garantizando contratos JSON estables para sistemas externos.
+                    </div>
                 </div>
-                <div class="code-panel">
-                    (Aquí se mostrará el código en el siguiente paso)
+                <div class="code-panel" id="cu5-code-panel">
+                    <pre><code id="cu5-code-block" class="language-php"></code></pre>
                 </div>
             </div>
             <div class="slide-footer">Implementación Técnica</div>

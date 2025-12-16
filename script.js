@@ -1117,6 +1117,91 @@ const CU4_VIEW_CODE = `@extends('portalTemplates.layout')
     </section>
 @endsection`;
 
+// CU5 DATA
+const CU5_ROUTES_CODE = `// Sensores
+Route::get('sensores', [SensorApiController::class, 'index']);
+Route::get('sensores/{id}', [SensorApiController::class, 'show']);
+Route::post('sensores', [SensorApiController::class, 'store']);
+
+// Medidas
+Route::get('medidas', [MedidaApiController::class, 'index']);
+Route::get('medidas/{id}', [MedidaApiController::class, 'show']);
+Route::post('medidas', [MedidaApiController::class, 'store']);`;
+
+const CU5_CONTROLLER_CODE = `<?php
+namespace App\\Http\\Controllers;
+
+use App\\Http\\Requests\\SensorStoreRequest;
+use App\\Http\\Resources\\SensorResource;
+use App\\Models\\Sensor;
+
+class SensorApiController extends Controller
+{
+    public function index()
+    {
+        $sensores = Sensor::orderByDesc('id_sensor')->get();
+        return SensorResource::collection($sensores);
+    }
+
+    public function show($id)
+    {
+        $sensor = Sensor::where('id_sensor', $id)->first();
+        if (!$sensor) {
+            return response()->json(['error' => 'Sensor no encontrado'], 404);
+        }
+        return new SensorResource($sensor);
+    }
+
+    public function store(SensorStoreRequest $request)
+    {
+        $sensor = Sensor::create($request->validated());
+        return (new SensorResource($sensor))
+            ->response()
+            ->setStatusCode(201);
+    }
+}`;
+
+const CU5_REQUEST_CODE = `<?php
+
+namespace App\\Http\\Requests;
+
+use Illuminate\\Foundation\\Http\\FormRequest;
+
+class SensorStoreRequest extends FormRequest
+{
+    public function authorize(): bool { return true; }
+
+    public function rules(): array
+    {
+        return [
+            'modelo'       => ['required', 'string', 'max:100'],
+            'ubicacion'    => ['nullable', 'string', 'max:150'],
+            'unidad'       => ['required', 'string', 'max:20'],
+            'id_proveedor' => ['required', 'integer', 'exists:proveedores,id_proveedor'],
+        ];
+    }
+}`;
+
+const CU5_RESOURCE_CODE = `<?php
+
+namespace App\\Http\\Resources;
+
+use Illuminate\\Http\\Resources\\Json\\JsonResource;
+
+class SensorResource extends JsonResource
+{
+    public function toArray($request): array
+    {
+        return [
+            'id_sensor'   => $this->id_sensor,
+            'modelo'      => $this->modelo,
+            'ubicacion'   => $this->ubicacion,
+            'unidad'      => $this->unidad,
+            'id_proveedor'=> $this->id_proveedor,
+        ];
+    }
+}`;
+
 document.addEventListener('click', (e) => {
     // Check if it is a tech nav button
     if (e.target.classList.contains('tech-nav-btn')) {
@@ -1179,6 +1264,19 @@ document.addEventListener('click', (e) => {
             }
         }
 
+        // CU5 Handling
+        if (tab && tab.startsWith('cu5-')) {
+            const cu5CodeBlock = document.getElementById('cu5-code-block');
+            if (cu5CodeBlock) {
+                if (tab === 'cu5-routes') cu5CodeBlock.textContent = CU5_ROUTES_CODE;
+                else if (tab === 'cu5-controller') cu5CodeBlock.textContent = CU5_CONTROLLER_CODE;
+                else if (tab === 'cu5-request') cu5CodeBlock.textContent = CU5_REQUEST_CODE;
+                else if (tab === 'cu5-resource') cu5CodeBlock.textContent = CU5_RESOURCE_CODE;
+
+                if (window.Prism) Prism.highlightElement(cu5CodeBlock);
+            }
+        }
+
         e.preventDefault();
         e.stopPropagation();
     }
@@ -1209,4 +1307,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cu4CodeBlock) {
         cu4CodeBlock.textContent = CU4_ROUTES_CODE;
     }
+
+    // CU5 Init
+    const cu5CodeBlock = document.getElementById('cu5-code-block');
+    if (cu5CodeBlock) {
+        cu5CodeBlock.textContent = CU5_ROUTES_CODE;
+    }
 });
+```
