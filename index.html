@@ -434,15 +434,18 @@
             <h2>Caso de Uso CU4 — Implementación Técnica</h2>
             <div class="tech-impl-container">
                 <div class="tech-nav-column">
-                    <button class="tech-nav-btn active">Controlador</button>
-                    <button class="tech-nav-btn">Vista (Blade)</button>
-                    <button class="tech-nav-btn">Modelo / Eloquent</button>
-                    <button class="tech-nav-btn">Ruta</button>
-                    <button class="tech-nav-btn">JS / AJAX</button>
-                    <button class="tech-nav-btn">Validaciones</button>
+                    <button class="tech-nav-btn active" data-tab="cu4-routes">Rutas pago</button>
+                    <button class="tech-nav-btn" data-tab="cu4-controller">PaymentController</button>
+                    <button class="tech-nav-btn" data-tab="cu4-view">Vista pasarela de pago</button>
+
+                    <div class="breeze-note">
+                        <strong>Nota:</strong>
+                        Confirmación de compra mediante transacción DB con <code>lockForUpdate</code> para garantizar
+                        consistencia de stock.
+                    </div>
                 </div>
-                <div class="code-panel">
-                    (Aquí se mostrará el código en el siguiente paso)
+                <div class="code-panel" id="cu4-code-panel">
+                    <pre><code id="cu4-code-block" class="language-php"></code></pre>
                 </div>
             </div>
             <div class="slide-footer">Implementación Técnica</div>

@@ -942,6 +942,181 @@ const CU3_VIEW_CODE = `@extends('portalTemplates.layout')
     </section>
 @endsection`;
 
+// CU4 DATA
+const CU4_ROUTES_CODE = `// Pasarela de Pago (Simulada)
+Route::get('/pago/iniciar', [\\App\\Http\\Controllers\\PaymentController::class, 'showGateway'])->name('payment.gateway');
+Route::post('/pago/procesar', [\\App\\Http\\Controllers\\PaymentController::class, 'processPayment'])->name('payment.process');
+Route::get('/pago/completado', [\\App\\Http\\Controllers\\PaymentController::class, 'showSuccess'])->name('payment.success');`;
+
+const CU4_CONTROLLER_CODE = `<?php
+
+namespace App\\Http\\Controllers;
+
+use App\\Models\\Contenido;
+use App\\Models\\Order;
+use App\\Models\\OrderItem;
+use App\\Services\\CartManager;
+use Illuminate\\Http\\Request;
+use Illuminate\\Support\\Facades\\DB;
+use Illuminate\\View\\View;
+
+class PaymentController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    public function showGateway()
+    {
+        $cart = CartManager::currentCart()->load('items');
+
+        if ($cart->items->isEmpty()) {
+            return redirect()->route('carrito.index')
+                ->withErrors(['checkout' => 'Tu carrito está vacío.']);
+        }
+
+        return view('portalTemplates.payment.gateway', [
+            'cart' => $cart,
+            'items' => $cart->items,
+            'total' => $cart->total(),
+        ]);
+    }
+
+    public function processPayment()
+    {
+        $cart = CartManager::currentCart()->load('items');
+
+        if ($cart->items->isEmpty()) {
+            return redirect()->route('carrito.index')
+                ->withErrors(['checkout' => 'Tu carrito está vacío.']);
+        }
+
+        $errores = [];
+
+        try {
+            DB::transaction(function () use ($cart, &$errores) {
+
+                $contenidosSeleccionados = [];
+
+                foreach ($cart->items as $item) {
+                    $contenido = Contenido::where('id_contenido', $item->id_contenido)
+                        ->lockForUpdate()
+                        ->first();
+
+                    if (!$contenido) {
+                        $errores[] = "El vendedor ya no ofrece {$item->nombre_producto}.";
+                        continue;
+                    }
+
+                    if ($contenido->stock < $item->cantidad) {
+                        $errores[] = "Stock insuficiente para {$item->nombre_producto}.";
+                    }
+
+                    $contenidosSeleccionados[$item->id_contenido] = $contenido;
+                }
+
+                if (!empty($errores)) {
+                    throw new \\RuntimeException('Stock insuficiente');
+                }
+
+                $order = Order::create([
+                    'user_id' => auth()->id(),
+                    'total' => $cart->total(),
+                    'estado' => 'pagado',
+                ]);
+
+                foreach ($cart->items as $item) {
+                    $contenido = $contenidosSeleccionados[$item->id_contenido];
+
+                    $contenido->stock -= $item->cantidad;
+                    $contenido->save();
+
+                    OrderItem::create([
+                        'order_id' => $order->id,
+                        'id_contenido' => $item->id_contenido,
+                        'nombre_producto' => $item->nombre_producto,
+                        'nombre_vendedor' => $item->nombre_vendedor,
+                        'precio_unitario' => $item->precio_unitario,
+                        'cantidad' => $item->cantidad,
+                        'subtotal' => $item->subtotal(),
+                    ]);
+                }
+
+                $cart->items()->delete();
+                $cart->estado = 'confirmado';
+                $cart->save();
+
+                session()->forget('cart_token');
+                session()->forget('cart_count');
+                session(['cart_count' => 0]);
+
+            }, 3);
+
+        } catch (\\Throwable $e) {
+            report($e);
+            $errores[] = 'Ocurrió un problema al procesar el pago.';
+        }
+
+        if (!empty($errores)) {
+            return redirect()->route('carrito.index')
+                ->withErrors(['checkout' => implode(' | ', $errores)]);
+        }
+
+        return redirect()->route('payment.success');
+    }
+
+    public function showSuccess(): View
+    {
+        return view('portalTemplates.payment.success');
+    }
+}`;
+
+const CU4_VIEW_CODE = `@extends('portalTemplates.layout')
+
+@section('content')
+    <section class="pago-wrapper">
+        <div class="pago-header">
+            <h1>Pasarela de Pago Segura</h1>
+            <p>Revisa tu pedido antes de confirmar el pago.</p>
+        </div>
+
+        <div class="pago-container">
+            <div class="pago-resumen">
+                <h2>Resumen del Pedido</h2>
+                <ul class="pago-lista-items">
+                    @foreach($items as $item)
+                        <li>
+                            <span class="item-nombre">{{ $item->nombre_producto }}</span>
+                            <span class="item-cantidad">x{{ $item->cantidad }}</span>
+                            <span class="item-precio">{{ number_format($item->subtotal(), 2, ',', '.') }} €</span>
+                        </li>
+                    @endforeach
+                </ul>
+                <div class="pago-total">
+                    <span>Total a pagar:</span>
+                    <strong>{{ number_format($total, 2, ',', '.') }} €</strong>
+                </div>
+            </div>
+
+            <div class="pago-metodo">
+                <h3>Método de Pago</h3>
+                <input type="text" id="card_number"
+                       placeholder="Indicar aquí tarjeta de crédito o débito"
+                       required minlength="16" pattern="\\d{16,}">
+            </div>
+
+            <form action="{{ route('payment.process') }}" method="POST">
+                @csrf
+                <a href="{{ route('carrito.index') }}" class="btn btn-outline">Cancelar</a>
+                <button type="submit" class="btn btn-primary btn-confirm">
+                    Confirmar y Pagar
+                </button>
+            </form>
+        </div>
+    </section>
+@endsection`;
+
 document.addEventListener('click', (e) => {
     // Check if it is a tech nav button
     if (e.target.classList.contains('tech-nav-btn')) {
@@ -992,6 +1167,18 @@ document.addEventListener('click', (e) => {
             }
         }
 
+        // CU4 Handling
+        if (tab && tab.startsWith('cu4-')) {
+            const cu4CodeBlock = document.getElementById('cu4-code-block');
+            if (cu4CodeBlock) {
+                if (tab === 'cu4-routes') cu4CodeBlock.textContent = CU4_ROUTES_CODE;
+                else if (tab === 'cu4-controller') cu4CodeBlock.textContent = CU4_CONTROLLER_CODE;
+                else if (tab === 'cu4-view') cu4CodeBlock.textContent = CU4_VIEW_CODE;
+
+                if (window.Prism) Prism.highlightElement(cu4CodeBlock);
+            }
+        }
+
         e.preventDefault();
         e.stopPropagation();
     }
@@ -1015,5 +1202,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const cu3CodeBlock = document.getElementById('cu3-code-block');
     if (cu3CodeBlock) {
         cu3CodeBlock.textContent = CU3_ROUTES_CODE;
+    }
+
+    // CU4 Init
+    const cu4CodeBlock = document.getElementById('cu4-code-block');
+    if (cu4CodeBlock) {
+        cu4CodeBlock.textContent = CU4_ROUTES_CODE;
     }
 });
