@@ -1248,6 +1248,279 @@ class ProductosSeeder extends Seeder
     }
 }`;
 
+// CU6 DATA
+const CU6_JS_CODE = `(() => {
+    // --- URLs del backend ---
+    const ORIGIN = location.origin;
+    const URL_SENSORES = \`\${ORIGIN}/sensores\`;
+    const URL_MEDIDAS  = \`\${ORIGIN}/medidas\`;
+
+    // --- Elementos del DOM ---
+    const selSensor    = document.getElementById('selSensor');
+    const unidadActual = document.getElementById('unidadActual');
+    const fDesde       = document.getElementById('fDesde');
+    const fHasta       = document.getElementById('fHasta');
+    const btnCargar    = document.getElementById('btnCargar');
+    const btnDescargar = document.getElementById('btnDescargar');
+    const chkMedia     = document.getElementById('chkMedia');
+    const chkPuntos    = document.getElementById('chkPuntos');
+    const graficoDiv   = document.getElementById('grafico');
+
+    const lblTotal = document.getElementById('lblTotal');
+    const lblMin   = document.getElementById('lblMin');
+    const lblMax   = document.getElementById('lblMax');
+    const lblProm  = document.getElementById('lblProm');
+
+    // --- Variables globales ---
+    let chart = null;
+    let sensores = [];
+
+    // --- Utilidades ---
+    const fmtNum = (n) => (n ?? '').toLocaleString('es-ES', { maximumFractionDigits: 2 });
+
+    const mediaMovil = (arr, k = 7) => {
+        const out = [];
+        let sum = 0;
+        const q = [];
+        arr.forEach(v => {
+            q.push(v);
+            sum += v;
+            if (q.length > k) sum -= q.shift();
+            out.push(sum / q.length);
+        });
+        return out;
+    };
+
+    const actualizarResumen = (valores) => {
+        if (!valores.length) {
+            lblTotal.textContent = 'Total: 0';
+            lblMin.textContent   = 'Mín: —';
+            lblMax.textContent   = 'Máx: —';
+            lblProm.textContent  = 'Media: —';
+            return;
+        }
+        const min = Math.min(...valores);
+        const max = Math.max(...valores);
+        const prom = valores.reduce((a, b) => a + b, 0) / valores.length;
+
+        lblTotal.textContent = \`Total: \${valores.length}\`;
+        lblMin.textContent   = \`Mín: \${fmtNum(min)}\`;
+        lblMax.textContent   = \`Máx: \${fmtNum(max)}\`;
+        lblProm.textContent  = \`Media: \${fmtNum(prom)}\`;
+    };
+
+    // --- Cargar sensores ---
+    const cargarSensores = async () => {
+        try {
+            const res = await fetch(URL_SENSORES, { headers: { 'Accept': 'application/json' } });
+            const json = await res.json();
+            sensores = Array.isArray(json) ? json : (json.data || []);
+            selSensor.innerHTML = '<option value="">— Selecciona un sensor —</option>';
+            sensores.forEach(s => {
+                const id = s.id_sensor ?? s.id;
+                const nombre = s.modelo ?? s.descripcion ?? s.nombre ?? \`Sensor \${id}\`;
+                const opt = document.createElement('option');
+                opt.value = id;
+                opt.textContent = \`\${id} · \${nombre}\`;
+                opt.dataset.unidad = s.unidad || '';
+                selSensor.appendChild(opt);
+            });
+        } catch (err) {
+            console.error(err);
+            alert('Error cargando sensores.');
+        }
+    };
+
+    // --- Mostrar unidad al elegir sensor ---
+    selSensor.addEventListener('change', () => {
+        const opt = selSensor.selectedOptions[0];
+        unidadActual.textContent = opt?.dataset?.unidad ? \`Unidad: \${opt.dataset.unidad}\` : '';
+    });
+
+    // --- Dibujar gráfico con ApexCharts ---
+    const pintarGrafico = (labels, valores, unidad, mostrarPuntos, serieMM = null) => {
+        if (chart) chart.destroy();
+
+        const options = {
+            chart: {
+                type: 'line',
+                height: 420,
+                toolbar: { show: true },
+                animations: { enabled: true, easing: 'easeinout', speed: 600 },
+                zoom: { enabled: true }
+            },
+            series: [
+                { name: \`Valor (\${unidad || ''})\`, data: valores }
+            ],
+            stroke: {
+                width: 3,
+                curve: 'smooth'
+            },
+            markers: { size: mostrarPuntos ? 4 : 0 },
+            colors: ['#007bff'],
+            xaxis: {
+                categories: labels,
+                title: { text: 'Fecha / Hora' },
+                labels: {
+                    rotate: -45,
+                    style: { colors: '#333' }
+                }
+            },
+            yaxis: {
+                title: { text: unidad || 'Valor' },
+                labels: { formatter: (val) => fmtNum(val) }
+            },
+            tooltip: {
+                theme: 'light',
+                y: { formatter: val => \`\${val.toFixed(2)} \${unidad || ''}\` }
+            },
+            grid: { borderColor: '#e5e5e5' },
+            legend: { position: 'top' }
+        };
+
+        if (serieMM) {
+            options.series.push({
+                name: 'Media móvil (7)',
+                data: serieMM,
+                color: '#FF4560'
+            });
+        }
+
+        chart = new ApexCharts(graficoDiv, options);
+        chart.render();
+    };
+
+    // --- Cargar medidas ---
+    const cargarMedidas = async () => {
+        const id = selSensor.value;
+        if (!id) { alert('Selecciona un sensor.'); return; }
+
+        btnCargar.textContent = 'Cargando...';
+        btnCargar.disabled = true;
+
+        try {
+            const res = await fetch(\`\${URL_MEDIDAS}?id_sensor=\${id}\`, { headers: { 'Accept': 'application/json' } });
+            const json = await res.json();
+            const medidas = Array.isArray(json) ? json : (json.data || []);
+
+            if (!medidas.length) {
+                alert('No hay medidas para este sensor.');
+                actualizarResumen([]);
+                if (chart) chart.destroy();
+                return;
+            }
+
+            medidas.sort((a, b) => new Date(a.fecha_hora) - new Date(b.fecha_hora));
+
+            const labels = medidas.map(m => {
+                const fecha = m.fecha_hora.split('.')[0].replace('T', ' ');
+                return fecha.slice(0, 16);
+            });
+
+            const valores = medidas.map(m => Number(m.valor));
+            const unidad = selSensor.selectedOptions[0]?.dataset?.unidad || '';
+            const serieMM = chkMedia.checked ? mediaMovil(valores, 7) : null;
+
+            pintarGrafico(labels, valores, unidad, chkPuntos.checked, serieMM);
+            actualizarResumen(valores);
+        } catch (err) {
+            console.error(err);
+            alert('Error cargando medidas.');
+        } finally {
+            btnCargar.textContent = 'Cargar gráfico';
+            btnCargar.disabled = false;
+        }
+    };
+
+    // --- Guardar gráfico ---
+    btnDescargar.addEventListener('click', () => {
+        if (!chart) return;
+        chart.dataURI().then(({ imgURI }) => {
+            const a = document.createElement('a');
+            a.href = imgURI;
+            a.download = \`grafico_sensor_\${selSensor.value || 'NA'}.png\`;
+            a.click();
+        });
+    });
+
+    // --- Inicialización ---
+    btnCargar.addEventListener('click', cargarMedidas);
+    cargarSensores();
+})();`;
+
+const CU6_VIEW_CODE = `<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gráficos</title>
+    <link rel="stylesheet" href="{{ asset('css/grupo1.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/p4-graficos.css') }}">
+    {{-- Librería ApexCharts debe cargarse primero --}}
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body>
+
+{{-- Header parcial --}}
+@include('portalTemplates.partials.header')
+
+<main class="p4-graficos">
+    <h1 class="titulo">Gráficos de Sensores</h1>
+
+    <div class="panel-controles">
+        <div class="fila">
+            <label class="etiqueta">Sensor</label>
+            <select id="selSensor">
+                <option value="">— Selecciona un sensor —</option>
+            </select>
+            <span id="unidadActual" class="chip"></span>
+        </div>
+
+        <div class="fila">
+            <div>
+                <label class="etiqueta">Desde</label>
+                <input type="date" id="fDesde">
+            </div>
+            <div>
+                <label class="etiqueta">Hasta</label>
+                <input type="date" id="fHasta" max="">
+            </div>
+            <button id="btnCargar" class="btn-principal">Cargar gráfico</button>
+            <button id="btnDescargar" class="btn-secundario" title="Descargar imagen PNG del gráfico">Guardar imagen</button>
+        </div>
+
+        <div class="fila opciones">
+            <label><input type="checkbox" id="chkMedia"> Mostrar media móvil (7)</label>
+            <label><input type="checkbox" id="chkPuntos" checked> Mostrar puntos</label>
+        </div>
+    </div>
+
+    <div class="lienzo">
+        <div id="grafico"></div>
+    </div>
+
+    <div class="resumen">
+        <span id="lblTotal">Total: 0</span>
+        <span id="lblMin">Mín: —</span>
+        <span id="lblMax">Máx: —</span>
+        <span id="lblProm">Media: —</span>
+    </div>
+
+    <div class="explicacion">
+        <p>
+            <strong>*Media móvil (7):</strong> representa el promedio de las últimas siete mediciones del sensor.
+        </p>
+    </div>
+
+</main>
+
+{{-- Footer parcial --}}
+@include('portalTemplates.partials.footer')
+
+{{-- JS externo --}}
+<script src="{{ asset('js/p4-graficos.js') }}" defer></script>
+</body>
+</html>`;
+
 document.addEventListener('click', (e) => {
     // Check if it is a tech nav button
     if (e.target.classList.contains('tech-nav-btn')) {
@@ -1273,7 +1546,6 @@ document.addEventListener('click', (e) => {
             }
         }
 
-        // CU2 Handling
         // CU2 Handling
         if (tab && tab.startsWith('cu2-')) {
             const cu2CodeBlock = document.getElementById('cu2-code-block');
@@ -1326,6 +1598,17 @@ document.addEventListener('click', (e) => {
             }
         }
 
+        // CU6 Handling
+        if (tab && tab.startsWith('cu6-')) {
+            const cu6CodeBlock = document.getElementById('cu6-code-block');
+            if (cu6CodeBlock) {
+                if (tab === 'cu6-js') cu6CodeBlock.textContent = CU6_JS_CODE;
+                else if (tab === 'cu6-view') cu6CodeBlock.textContent = CU6_VIEW_CODE;
+
+                if (window.Prism) Prism.highlightElement(cu6CodeBlock);
+            }
+        }
+
         e.preventDefault();
         e.stopPropagation();
     }
@@ -1362,5 +1645,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cu5CodeBlock) {
         cu5CodeBlock.textContent = CU5_ROUTES_CODE;
     }
-});
 
+    // CU6 Init
+    const cu6CodeBlock = document.getElementById('cu6-code-block');
+    if (cu6CodeBlock) {
+        cu6CodeBlock.textContent = CU6_JS_CODE;
+    }
+});

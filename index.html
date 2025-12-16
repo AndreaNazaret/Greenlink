@@ -564,15 +564,17 @@
             <h2>Caso de Uso CU6 — Implementación Técnica</h2>
             <div class="tech-impl-container">
                 <div class="tech-nav-column">
-                    <button class="tech-nav-btn active">Controlador</button>
-                    <button class="tech-nav-btn">Vista (Blade)</button>
-                    <button class="tech-nav-btn">Modelo / Eloquent</button>
-                    <button class="tech-nav-btn">Ruta</button>
-                    <button class="tech-nav-btn">JS / AJAX</button>
-                    <button class="tech-nav-btn">Validaciones</button>
+                    <button class="tech-nav-btn active" data-tab="cu6-js">JS gráficos</button>
+                    <button class="tech-nav-btn" data-tab="cu6-view">Vista gráficos</button>
+
+                    <div class="breeze-note">
+                        <strong>Nota:</strong>
+                        El cliente consume la API REST, normaliza series temporales y actualiza dinámicamente el gráfico
+                        (ApexCharts) sin recargar la página.
+                    </div>
                 </div>
-                <div class="code-panel">
-                    (Aquí se mostrará el código en el siguiente paso)
+                <div class="code-panel" id="cu6-code-panel">
+                    <pre><code id="cu6-code-block" class="language-javascript"></code></pre>
                 </div>
             </div>
             <div class="slide-footer">Implementación Técnica</div>
@@ -593,11 +595,9 @@
                         </div>
                         <div class="uc-block">
                             <strong>Funcionalidad implementada:</strong>
-                            <p>Creación de comentario/entrada mediante formulario (con validación básica).<br>
-                                Listado de comentarios/entradas en orden cronológico (vista Blade con datos
-                                dinámicos).<br>
-                                Persistencia en base de datos asociada al usuario (relación Usuario →
-                                Comentario/Entrada).</p>
+                            <p>Creación de comentario/entrada mediante formulario.<br>
+                                Listado de comentarios/entradas en orden cronológico.<br>
+                                Persistencia en base de datos asociada al usuario.</p>
                         </div>
                     </div>
 
