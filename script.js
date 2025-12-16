@@ -1521,6 +1521,277 @@ const CU6_VIEW_CODE = `<!DOCTYPE html>
 </body>
 </html>`;
 
+// CU7 DATA
+const CU7_ROUTES_CODE = `// Blog
+Route::get('/blog', [App\\Http\\Controllers\\BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/crear', [App\\Http\\Controllers\\BlogController::class, 'create'])->middleware('auth')->name('blog.create');
+Route::post('/blog', [App\\Http\\Controllers\\BlogController::class, 'store'])->middleware('auth')->name('blog.store');
+Route::get('/blog/{id}/editar', [App\\Http\\Controllers\\BlogController::class, 'edit'])->middleware('auth')->name('blog.edit');
+Route::put('/blog/{id}', [App\\Http\\Controllers\\BlogController::class, 'update'])->middleware('auth')->name('blog.update');
+Route::delete('/blog/{id}', [App\\Http\\Controllers\\BlogController::class, 'destroy'])->middleware('auth')->name('blog.destroy');
+Route::get('/blog/{id}', [App\\Http\\Controllers\\BlogController::class, 'show'])->name('blog.show');`;
+
+const CU7_CONTROLLER_CODE = `<?php
+
+namespace App\\Http\\Controllers;
+
+use App\\Models\\Comentario;
+use Illuminate\\Http\\Request;
+use Illuminate\\Support\\Facades\\Auth;
+
+class BlogController extends Controller
+{
+    // Listado público
+    public function index(Request $request)
+    {
+        $query = Comentario::with(['cliente', 'vendedor'])->orderBy('fecha', 'desc');
+
+        if ($request->has('tipo')) {
+            $query->where('tipo_blog', $request->tipo);
+        }
+
+        $comentarios = $query->paginate(10);
+
+        return view('blog.index', compact('comentarios'));
+    }
+
+    // Detalle público
+    public function show($id)
+    {
+        $comentario = Comentario::with(['cliente', 'vendedor'])->findOrFail($id);
+        return view('blog.show', compact('comentario'));
+    }
+
+    // Formulario de creación (Solo clientes)
+    public function create()
+    {
+        if (!auth()->user()->isCliente()) {
+            return redirect()->route('blog.index')->with('error', 'Solo los clientes pueden crear entradas.');
+        }
+
+        $vendedores = \\App\\Models\\Vendedor::all();
+        return view('blog.create', compact('vendedores'));
+    }
+
+    // Guardar comentario
+    public function store(Request $request)
+    {
+        if (!auth()->user()->isCliente()) {
+            return redirect()->route('blog.index');
+        }
+
+        $request->validate([
+            'comentario' => 'required|string|max:1000',
+            'puntuacion' => 'required|integer|min:1|max:5',
+            'tipo_blog' => 'required|string|in:general,vendedores,productos,otros',
+            'id_vendedor' => [
+                'nullable',
+                'exists:vendedores,id_vendedor',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->tipo_blog === 'vendedores' && empty($value)) {
+                        $fail('Debes seleccionar un vendedor para este tipo de entrada.');
+                    }
+                },
+            ],
+        ]);
+
+        \\App\\Models\\Comentario::create([
+            'id_cliente' => auth()->user()->id_cliente,
+            'fecha' => now(),
+            'puntuacion' => $request->puntuacion,
+            'comentario' => $request->comentario,
+            'tipo_blog' => $request->tipo_blog,
+            'id_vendedor' => $request->tipo_blog === 'vendedores' ? $request->id_vendedor : null,
+        ]);
+
+        return redirect()->route('blog.index')->with('success', 'Entrada publicada correctamente.');
+    }
+
+    // Formulario de edición (Solo autor)
+    public function edit($id)
+    {
+        $comentario = Comentario::findOrFail($id);
+
+        if (!auth()->user()->isCliente() || auth()->user()->id_cliente !== $comentario->id_cliente) {
+            return redirect()->route('blog.index')->with('error', 'No tienes permiso para editar esta entrada.');
+        }
+
+        $vendedores = \\App\\Models\\Vendedor::all();
+        return view('blog.edit', compact('comentario', 'vendedores'));
+    }
+
+    // Actualizar comentario
+    public function update(Request $request, $id)
+    {
+        $comentario = Comentario::findOrFail($id);
+
+        if (!auth()->user()->isCliente() || auth()->user()->id_cliente !== $comentario->id_cliente) {
+            return redirect()->route('blog.index')->with('error', 'No tienes permiso para editar esta entrada.');
+        }
+
+        $request->validate([
+            'comentario' => 'required|string|max:1000',
+            'puntuacion' => 'required|integer|min:1|max:5',
+            'tipo_blog' => 'required|string|in:general,vendedores,productos,otros',
+            'id_vendedor' => [
+                'nullable',
+                'exists:vendedores,id_vendedor',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->tipo_blog === 'vendedores' && empty($value)) {
+                        $fail('Debes seleccionar un vendedor para este tipo de entrada.');
+                    }
+                },
+            ],
+        ]);
+
+        $comentario->update([
+            'puntuacion' => $request->puntuacion,
+            'comentario' => $request->comentario,
+            'tipo_blog' => $request->tipo_blog,
+            'id_vendedor' => $request->tipo_blog === 'vendedores' ? $request->id_vendedor : null,
+        ]);
+
+        return redirect()->route('blog.show', $comentario->id_comentario)->with('success', 'Entrada actualizada correctamente.');
+    }
+
+    // Eliminar comentario
+    public function destroy($id)
+    {
+        $comentario = Comentario::findOrFail($id);
+
+        if (!auth()->user()->isCliente() || auth()->user()->id_cliente !== $comentario->id_cliente) {
+            return redirect()->route('blog.index')->with('error', 'No tienes permiso para eliminar esta entrada.');
+        }
+
+        $comentario->delete();
+
+        return redirect()->route('blog.index')->with('success', 'Entrada eliminada correctamente.');
+    }
+}`;
+
+const CU7_VIEW_CODE = `@extends('portalTemplates.layout')
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/blog.css') }}">
+@endpush
+
+@section('content')
+    <div class="blog-container">
+        <div class="blog-header">
+            <h1 class="blog-title">Blog GreenLink</h1>
+            @auth
+                @if(auth()->user()->isCliente())
+                    <a href="{{ route('blog.create') }}" class="btn-new-entry">
+                        + Nueva Entrada
+                    </a>
+                @endif
+            @endauth
+        </div>
+
+        <div class="blog-filters">
+            <a href="{{ route('blog.index') }}" class="filter-link {{ !request('tipo') ? 'active' : '' }}">Todos</a>
+            <a href="{{ route('blog.index', ['tipo' => 'general']) }}"
+                class="filter-link {{ request('tipo') == 'general' ? 'active' : '' }}">Comunidad</a>
+            <a href="{{ route('blog.index', ['tipo' => 'vendedores']) }}"
+                class="filter-link {{ request('tipo') == 'vendedores' ? 'active' : '' }}">Vendedores</a>
+        </div>
+
+        @if(session('success'))
+            <div class="alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <div class="blog-grid">
+            @forelse($comentarios as $comentario)
+                <article class="blog-card">
+                    <div class="blog-card-header">
+                        <span class="blog-badge">
+                            {{ ucfirst($comentario->tipo_blog ?? 'General') }}
+                        </span>
+                        <span class="blog-date">
+                            {{ $comentario->fecha->format('d/m/Y') }}
+                        </span>
+                    </div>
+
+                    <h2 class="blog-card-title">
+                        <a href="{{ route('blog.show', $comentario->id_comentario) }}">
+                            {{ Str::limit($comentario->comentario, 60) }}
+                        </a>
+                    </h2>
+
+                    <div class="blog-card-meta">
+                        <span>Por: <strong>{{ $comentario->cliente->nombre ?? 'Anónimo' }}</strong></span>
+                        <span class="blog-stars">
+                            {{ str_repeat('★', $comentario->puntuacion) }}{{ str_repeat('☆', 5 - $comentario->puntuacion) }}
+                        </span>
+                    </div>
+
+                    @if($comentario->vendedor)
+                        <div style="font-size: 0.85rem; color: #2e7d32; margin-bottom: 0.75rem; font-weight: 500;">
+                            Dirigido a: <strong>{{ $comentario->vendedor->nombre }}</strong>
+                        </div>
+                    @endif
+
+                    <p class="blog-card-excerpt">
+                        {{ Str::limit($comentario->comentario, 120) }}
+                    </p>
+
+                    <div class="blog-card-footer">
+                        <a href="{{ route('blog.show', $comentario->id_comentario) }}" class="read-more">Leer más &rarr;</a>
+                    </div>
+                </article>
+            @empty
+                <div class="empty-state" style="grid-column: 1 / -1;">
+                    <p>No hay entradas en el blog todavía.</p>
+                    @auth
+                        @if(auth()->user()->isCliente())
+                            <a href="{{ route('blog.create') }}" class="read-more" style="margin-top: 1rem;">¡Sé el primero en
+                                publicar!</a>
+                        @endif
+                    @endauth
+                </div>
+            @endforelse
+        </div>
+
+        <div class="mt-8">
+            {{ $comentarios->links() }}
+        </div>
+    </div>
+@endsection`;
+
+const CU7_MODEL_CODE = `<?php
+
+namespace App\\Models;
+
+use Illuminate\\Database\\Eloquent\\Model;
+
+class Comentario extends Model
+{
+    protected $table = 'comentarios';
+    protected $primaryKey = 'id_comentario';
+    public $timestamps = false;
+    protected $keyType = 'int';
+
+    protected $fillable = ['id_cliente', 'id_vendedor', 'fecha', 'puntuacion', 'comentario', 'tipo_blog'];
+
+    protected $casts = [
+        'fecha' => 'date',
+        'puntuacion' => 'integer',
+    ];
+
+    // Relaciones
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class, 'id_cliente');
+    }
+
+    public function vendedor()
+    {
+        return $this->belongsTo(Vendedor::class, 'id_vendedor', 'id_vendedor');
+    }
+}`;
+
 document.addEventListener('click', (e) => {
     // Check if it is a tech nav button
     if (e.target.classList.contains('tech-nav-btn')) {
@@ -1609,6 +1880,19 @@ document.addEventListener('click', (e) => {
             }
         }
 
+        // CU7 Handling
+        if (tab && tab.startsWith('cu7-')) {
+            const cu7CodeBlock = document.getElementById('cu7-code-block');
+            if (cu7CodeBlock) {
+                if (tab === 'cu7-routes') cu7CodeBlock.textContent = CU7_ROUTES_CODE;
+                else if (tab === 'cu7-controller') cu7CodeBlock.textContent = CU7_CONTROLLER_CODE;
+                else if (tab === 'cu7-view') cu7CodeBlock.textContent = CU7_VIEW_CODE;
+                else if (tab === 'cu7-model') cu7CodeBlock.textContent = CU7_MODEL_CODE;
+
+                if (window.Prism) Prism.highlightElement(cu7CodeBlock);
+            }
+        }
+
         e.preventDefault();
         e.stopPropagation();
     }
@@ -1650,5 +1934,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const cu6CodeBlock = document.getElementById('cu6-code-block');
     if (cu6CodeBlock) {
         cu6CodeBlock.textContent = CU6_JS_CODE;
+    }
+
+    // CU7 Init
+    const cu7CodeBlock = document.getElementById('cu7-code-block');
+    if (cu7CodeBlock) {
+        cu7CodeBlock.textContent = CU7_ROUTES_CODE;
     }
 });

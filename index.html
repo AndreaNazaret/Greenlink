@@ -627,13 +627,19 @@
             <h2>Caso de Uso CU7 — Implementación Técnica</h2>
             <div class="tech-impl-container">
                 <div class="tech-nav-column">
-                    <button class="tech-nav-btn active">Ruta</button>
-                    <button class="tech-nav-btn">Controlador</button>
-                    <button class="tech-nav-btn">Vista (Blade)</button>
-                    <button class="tech-nav-btn">Modelo / BD</button>
-                    <button class="tech-nav-btn">Validación</button>
+                    <button class="tech-nav-btn active" data-tab="cu7-routes">Rutas blog</button>
+                    <button class="tech-nav-btn" data-tab="cu7-controller">BlogController</button>
+                    <button class="tech-nav-btn" data-tab="cu7-view">Vista blog (index)</button>
+                    <button class="tech-nav-btn" data-tab="cu7-model">Modelo Comentario</button>
+
+                    <div class="breeze-note">
+                        <strong>Nota:</strong>
+                        La publicación queda ligada al rol (solo cliente) y al autor en BD, combinando validación,
+                        paginación y relaciones Eloquent para un muro consistente y trazable.
+                    </div>
                 </div>
-                <div class="code-panel">
+                <div class="code-panel" id="cu7-code-panel">
+                    <pre><code id="cu7-code-block" class="language-php"></code></pre>
                 </div>
             </div>
             <div class="slide-footer">Implementación Técnica</div>
