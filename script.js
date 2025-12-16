@@ -1228,6 +1228,7 @@ document.addEventListener('click', (e) => {
         }
 
         // CU2 Handling
+        // CU2 Handling
         if (tab && tab.startsWith('cu2-')) {
             const cu2CodeBlock = document.getElementById('cu2-code-block');
             if (cu2CodeBlock) {
@@ -1235,6 +1236,8 @@ document.addEventListener('click', (e) => {
                 else if (tab === 'cu2-view-cat') cu2CodeBlock.textContent = CU2_VIEW_CAT_CODE;
                 else if (tab === 'cu2-view-det') cu2CodeBlock.textContent = CU2_VIEW_DET_CODE;
                 else if (tab === 'cu2-controller') cu2CodeBlock.textContent = CU2_CONTROLLER_CODE;
+                else if (tab === 'cu2-migration') cu2CodeBlock.textContent = CU2_MIGRATION_CODE;
+                else if (tab === 'cu2-seeder') cu2CodeBlock.textContent = CU2_SEEDER_CODE;
 
                 if (window.Prism) Prism.highlightElement(cu2CodeBlock);
             }
@@ -1314,4 +1317,4 @@ document.addEventListener('DOMContentLoaded', () => {
         cu5CodeBlock.textContent = CU5_ROUTES_CODE;
     }
 });
-```
+
