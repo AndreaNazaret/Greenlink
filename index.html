@@ -322,9 +322,9 @@
                     <button class="tech-nav-btn" data-tab="cu2-view-cat">Vista catálogo</button>
                     <button class="tech-nav-btn" data-tab="cu2-view-det">Vista detalle</button>
                     <button class="tech-nav-btn" data-tab="cu2-controller">Controlador</button>
-                    
+
                     <div class="breeze-note">
-                        <strong>Nota:</strong> 
+                        <strong>Nota:</strong>
                         Catálogo filtra por categoría (GET param) y reconstruye la lista.
                     </div>
                 </div>
@@ -376,15 +376,21 @@
             <h2>Caso de Uso CU3 — Implementación Técnica</h2>
             <div class="tech-impl-container">
                 <div class="tech-nav-column">
-                    <button class="tech-nav-btn active">Controlador</button>
-                    <button class="tech-nav-btn">Vista (Blade)</button>
-                    <button class="tech-nav-btn">Modelo / Eloquent</button>
-                    <button class="tech-nav-btn">Ruta</button>
-                    <button class="tech-nav-btn">JS / AJAX</button>
-                    <button class="tech-nav-btn">Validaciones</button>
+                    <button class="tech-nav-btn active" data-tab="cu3-routes">Rutas carrito</button>
+                    <button class="tech-nav-btn" data-tab="cu3-controller">Controlador carrito</button>
+                    <button class="tech-nav-btn" data-tab="cu3-view">Vista carrito</button>
+
+                    <div class="breeze-note">
+                        <strong>Notas técnicas:</strong>
+                        <ul style="margin-top: 5px; font-size: 0.8rem; padding-left: 15px;">
+                            <li>Gestión de estado del carrito mediante <code>CartManager</code> (Service Layer).</li>
+                            <li>Validación de stock antes de añadir/actualizar (bloqueo en servidor).</li>
+                            <li>Cálculo dinámico de totales y subtotales en tiempo real.</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="code-panel">
-                    (Aquí se mostrará el código en el siguiente paso)
+                <div class="code-panel" id="cu3-code-panel">
+                    <pre><code id="cu3-code-block" class="language-php"></code></pre>
                 </div>
             </div>
             <div class="slide-footer">Implementación Técnica</div>

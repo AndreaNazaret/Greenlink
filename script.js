@@ -651,6 +651,297 @@ class ProductoController extends Controller
     }
 }`;
 
+// CU3 DATA
+const CU3_ROUTES_CODE = `// Carrito
+Route::get('/carrito', [CartController::class, 'index'])->name('carrito.index');
+Route::post('/carrito/add', [CartController::class, 'add'])->name('carrito.add');
+Route::post('/carrito/update', [CartController::class, 'update'])->name('carrito.update');
+Route::post('/carrito/remove', [CartController::class, 'remove'])->name('carrito.remove');
+Route::post('/carrito/checkout', [CartController::class, 'checkout'])->name('carrito.checkout');`;
+
+const CU3_CONTROLLER_CODE = `<?php
+
+namespace App\\Http\\Controllers;
+
+use App\\Models\\CartItem;
+use App\\Models\\Contenido;
+use App\\Models\\Producto;
+use App\\Services\\CartManager;
+use Illuminate\\Http\\RedirectResponse;
+use Illuminate\\Http\\Request;
+use Illuminate\\Support\\Facades\\DB;
+use Illuminate\\View\\View;
+
+class CartController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth')->only('checkout');
+    }
+
+    public function index(): View
+    {
+        $cart = CartManager::currentCart()->load('items');
+        $items = $cart->items;
+
+        $contenidos = Contenido::whereIn('id_contenido', $items->pluck('id_contenido')->filter())
+            ->get()
+            ->keyBy('id_contenido');
+
+        return view('portalTemplates.carrito', [
+            'cart' => $cart,
+            'items' => $items,
+            'contenidos' => $contenidos,
+            'total' => $cart->total(),
+        ]);
+    }
+
+    public function add(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'id_producto' => 'required|integer|exists:productos,id_producto',
+            'id_contenido' => 'required|integer|exists:contenido,id_contenido',
+            'cantidad' => 'nullable|integer|min:1',
+        ]);
+
+        $cantidad = $data['cantidad'] ?? 1;
+
+        $contenido = Contenido::where('id_contenido', $data['id_contenido'])
+            ->where('id_producto', $data['id_producto'])
+            ->firstOrFail();
+
+        if ($cantidad > $contenido->stock) {
+            return back()->withErrors([
+                'cantidad' => 'La cantidad solicitada supera el stock disponible.',
+            ])->withInput();
+        }
+
+        $cart = CartManager::currentCart();
+
+        $existing = $cart->items()
+            ->where('id_contenido', $contenido->id_contenido)
+            ->first();
+
+        if ($existing) {
+            $nuevoTotal = $existing->cantidad + $cantidad;
+            if ($nuevoTotal > $contenido->stock) {
+                return back()->withErrors([
+                    'cantidad' => 'No hay stock suficiente para incrementar la cantidad solicitada.',
+                ]);
+            }
+
+            $existing->cantidad = $nuevoTotal;
+            $existing->fecha_actualizacion = now();
+            $existing->save();
+        } else {
+            $producto = $contenido->producto ?? Producto::findOrFail($data['id_producto']);
+
+            $cart->items()->create([
+                'id_producto' => $producto->id_producto,
+                'id_contenido' => $contenido->id_contenido,
+                'id_vendedor' => $contenido->id_vendedor,
+                'cantidad' => $cantidad,
+                'precio_unitario' => $contenido->precio,
+                'nombre_producto' => $producto->nombre,
+                'nombre_vendedor' => optional($contenido->vendedor)->nombre,
+                'fecha_creacion' => now(),
+                'fecha_actualizacion' => now(),
+            ]);
+        }
+
+        CartManager::refreshCounter($cart->fresh('items'));
+
+        return back()->with('status', 'Producto añadido al carrito correctamente.');
+    }
+
+    public function update(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'id_item' => 'required|integer|exists:carrito_items,id_item',
+            'cantidad' => 'required|integer|min:1',
+        ]);
+
+        $cart = CartManager::currentCart();
+
+        /** @var CartItem $item */
+        $item = $cart->items()
+            ->where('id_item', $data['id_item'])
+            ->firstOrFail();
+
+        $contenido = $item->id_contenido ? Contenido::find($item->id_contenido) : null;
+
+        if ($contenido && $data['cantidad'] > $contenido->stock) {
+            return back()->withErrors([
+                'cantidad' => 'La cantidad solicitada supera el stock disponible.',
+            ]);
+        }
+
+        $item->cantidad = $data['cantidad'];
+        $item->fecha_actualizacion = now();
+        $item->save();
+
+        CartManager::refreshCounter($cart->fresh('items'));
+
+        return back()->with('status', 'Cantidad actualizada.');
+    }
+
+    public function remove(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'id_item' => 'required|integer|exists:carrito_items,id_item',
+        ]);
+
+        $cart = CartManager::currentCart();
+
+        $item = $cart->items()
+            ->where('id_item', $data['id_item'])
+            ->first();
+
+        if ($item) {
+            $item->delete();
+        }
+
+        CartManager::refreshCounter($cart->fresh('items'));
+
+        return back()->with('status', 'Producto eliminado del carrito.');
+    }
+
+    public function checkout(): RedirectResponse
+    {
+        if (!auth()->check()) {
+            return redirect()->route('login')
+                ->with('status', 'Inicia sesión para confirmar tu compra.');
+        }
+
+        $cart = CartManager::currentCart();
+
+        if ($cart->items()->count() === 0) {
+            return back()->withErrors([
+                'checkout' => 'Tu carrito está vacío.',
+            ]);
+        }
+
+        return redirect()->route('payment.gateway');
+    }
+}`;
+
+const CU3_VIEW_CODE = `@extends('portalTemplates.layout')
+
+@section('content')
+    <section class="carrito-wrapper">
+        <div class="carrito-header">
+            <h1>Tu carrito de compra</h1>
+            <p>Gestiona tus productos antes de confirmar la compra.</p>
+        </div>
+
+        @if (session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                {{ $errors->first() }}
+            </div>
+        @endif
+
+        @if ($items->isEmpty())
+            <div class="carrito-empty">
+                <p>Tu carrito está vacío por ahora.</p>
+                <a class="btn btn-primary" href="{{ route('portal.productos') }}">Explorar catálogo</a>
+            </div>
+        @else
+            <div class="portal-table">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Vendedor</th>
+                        <th>Precio unitario</th>
+                        <th>Stock disponible</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($items as $item)
+                        @php
+                            $contenido = $contenidos[$item->id_contenido] ?? null;
+                            $stockDisponible = $contenido?->stock ?? 'N/D';
+                        @endphp
+                        <tr>
+                            <td>
+                                <strong>{{ $item->nombre_producto ?? 'Producto' }}</strong>
+                            </td>
+                            <td>{{ $item->nombre_vendedor ?? 'Vendedor' }}</td>
+                            <td>{{ number_format($item->precio_unitario, 2, ',', '.') }} €</td>
+                            <td>{{ $stockDisponible }}</td>
+                            <td>
+                                <form action="{{ route('carrito.update') }}" method="POST" class="carrito-form-inline">
+                                    @csrf
+                                    <input type="hidden" name="id_item" value="{{ $item->id_item }}">
+                                    <input type="number"
+                                           min="1"
+                                           @if(is_numeric($stockDisponible)) max="{{ $stockDisponible }}" @endif
+                                           name="cantidad"
+                                           value="{{ $item->cantidad }}">
+                                    <button type="submit">Actualizar</button>
+                                </form>
+                            </td>
+                            <td>{{ number_format($item->subtotal(), 2, ',', '.') }} €</td>
+                            <td>
+                                <form action="{{ route('carrito.remove') }}" method="POST" class="carrito-form">
+                                    @csrf
+                                    <input type="hidden" name="id_item" value="{{ $item->id_item }}">
+                                    <button type="submit">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="carrito-summary">
+                <div class="carrito-total-bar">
+                    <div class="total-info">
+                        <span>Total:</span>
+                        <strong>{{ number_format($total, 2, ',', '.') }} €</strong>
+                    </div>
+                </div>
+
+                <div class="pago-container">
+                    <a href="{{ route('portal.productos') }}" class="btn btn-outline btn-seguir">
+                        Seguir comprando
+                    </a>
+
+                    <form action="{{ route('carrito.checkout') }}" method="POST" class="carrito-form">
+                        @csrf
+                        <div class="tooltip-container">
+                            <button type="submit" class="btn btn-primary btn-confirm">
+                                Confirmar compra
+                            </button>
+                            <span class="tooltip-text">Al confirmar se reenviará a la pasarela de pago.</span>
+                        </div>
+                    </form>
+                </div>
+
+                @guest
+                    <p class="login-hint">
+                        Necesitas iniciar sesión para confirmar el pedido. Conservaremos tu carrito durante el proceso.
+                    </p>
+                    <div class="carrito-actions">
+                        <a class="btn btn-secondary" href="{{ route('login') }}">Iniciar sesión</a>
+                        <a class="btn btn-outline" href="{{ route('register') }}">Registrarme</a>
+                    </div>
+                @endguest
+            </div>
+        @endif
+    </section>
+@endsection`;
+
 document.addEventListener('click', (e) => {
     // Check if it is a tech nav button
     if (e.target.classList.contains('tech-nav-btn')) {
@@ -689,6 +980,18 @@ document.addEventListener('click', (e) => {
             }
         }
 
+        // CU3 Handling
+        if (tab && tab.startsWith('cu3-')) {
+            const cu3CodeBlock = document.getElementById('cu3-code-block');
+            if (cu3CodeBlock) {
+                if (tab === 'cu3-routes') cu3CodeBlock.textContent = CU3_ROUTES_CODE;
+                else if (tab === 'cu3-controller') cu3CodeBlock.textContent = CU3_CONTROLLER_CODE;
+                else if (tab === 'cu3-view') cu3CodeBlock.textContent = CU3_VIEW_CODE;
+
+                if (window.Prism) Prism.highlightElement(cu3CodeBlock);
+            }
+        }
+
         e.preventDefault();
         e.stopPropagation();
     }
@@ -700,12 +1003,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const cu1CodeBlock = document.getElementById('cu1-code-block');
     if (cu1CodeBlock) {
         cu1CodeBlock.textContent = CU1_CONTROLLER_CODE;
-        // Prism will auto-highlight on load usually, but we ensure content is there first
     }
 
     // CU2 Init
     const cu2CodeBlock = document.getElementById('cu2-code-block');
     if (cu2CodeBlock) {
         cu2CodeBlock.textContent = CU2_ROUTES_CODE;
+    }
+
+    // CU3 Init
+    const cu3CodeBlock = document.getElementById('cu3-code-block');
+    if (cu3CodeBlock) {
+        cu3CodeBlock.textContent = CU3_ROUTES_CODE;
     }
 });
