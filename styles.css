@@ -99,6 +99,14 @@
             color: var(--text-dark);
         }
 
+        .tech-subtitle {
+            font-size: 1.2rem;
+            color: #555;
+            font-weight: 400;
+            margin-bottom: 5px;
+            margin-top: -10px;
+        }
+
         p,
         li {
             font-size: 1.4rem;

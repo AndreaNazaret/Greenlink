@@ -316,17 +316,29 @@
         <!-- IMPL CU2 -->
         <div class="slide use-case-slide" data-step="0">
             <h2>Caso de Uso CU2 — Implementación Técnica</h2>
+            <h3 class="tech-subtitle">Navegación por el catálogo y consulta de productos (Laravel: rutas, controlador y
+                vistas Blade)</h3>
+
             <div class="tech-impl-container">
                 <div class="tech-nav-column">
-                    <button class="tech-nav-btn active">Controlador</button>
-                    <button class="tech-nav-btn">Vista (Blade)</button>
-                    <button class="tech-nav-btn">Modelo / Eloquent</button>
-                    <button class="tech-nav-btn">Ruta</button>
-                    <button class="tech-nav-btn">JS / AJAX</button>
-                    <button class="tech-nav-btn">Validaciones</button>
+                    <button class="tech-nav-btn active" data-tab="cu2-routes">Rutas</button>
+                    <button class="tech-nav-btn" data-tab="cu2-view-cat">Vista catálogo</button>
+                    <button class="tech-nav-btn" data-tab="cu2-view-det">Vista detalle</button>
+                    <button class="tech-nav-btn" data-tab="cu2-controller">Controlador</button>
+
+                    <div class="breeze-note">
+                        <strong>Notas técnicas:</strong>
+                        <ul style="margin-top: 5px; font-size: 0.8rem; padding-left: 15px;">
+                            <li>Ruta <code>/productos/{producto}</code> usa <em>Route Model Binding</em> para inyección
+                                automática.</li>
+                            <li>En detalle: <code>$producto-&gt;load('vendedores')</code> optimiza la query.</li>
+                            <li>Relación N:M accede a <code>pivot-&gt;stock</code> y <code>pivot-&gt;precio</code>.</li>
+                            <li>Catálogo filtra por categoría (GET param) y reconstruye la lista.</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="code-panel">
-                    (Aquí se mostrará el código en el siguiente paso)
+                <div class="code-panel" id="cu2-code-panel">
+                    <pre><code id="cu2-code-block" class="language-php"></code></pre>
                 </div>
             </div>
             <div class="slide-footer">Implementación Técnica</div>

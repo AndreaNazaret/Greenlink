@@ -324,6 +324,333 @@ const CU1_VIEW_CODE = `@extends('portalTemplates.layout')
 @endsection`;
 
 
+// CU2 DATA
+const CU2_ROUTES_CODE = `// Catálogo público de productos (para el portal)
+Route::get('/miPortal/productos', [ProductoController::class, 'catalogo'])
+    ->name('portal.productos');
+
+// Detalle de los productos incluyendo vendedores y stock
+Route::get('/productos/{producto}', [ProductoController::class, 'show'])
+    ->name('productos.show');`;
+
+const CU2_VIEW_CAT_CODE = `<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Productos - Greenlink</title>
+    <link rel="stylesheet" href="{{ asset('css/grupo1.css') }}">
+</head>
+
+<body>
+
+@include('portalTemplates.partials.header')
+
+<header>
+<div class="header-text">
+    <h1>CATÁLOGO PRODUCTOS</h1>
+    <p>A continuación encontrarás todos los productos que ponemos a tu disposición</p>
+</div>
+</header>
+
+<div class="catalogo-container">
+
+    <form method="GET" class="filtros">
+        <div>
+            <label>Categoría:</label>
+            <select name="categoria" onchange="this.form.submit()">
+                <option value="">Todas</option>
+                @foreach($categorias as $cat)
+                    <option value="{{ $cat }}" {{ request('categoria') === $cat ? 'selected' : '' }}>
+                        {{ $cat }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    </form>
+
+    <div class="productos-grid">
+        @foreach($productos as $producto)
+            <div class="producto-card">
+
+                <h3>{{ $producto->nombre }}</h3>
+
+
+                <div class="producto-detalle">
+                    <strong>Categoría:</strong>
+                    <span>{{ $producto->categoria }}</span>
+                </div>
+
+                @if($producto->certificacion)
+                    <div class="producto-detalle">
+                        <strong>Descripción:</strong>
+                        <span>{{ $producto->descripcion }}</span>
+                    </div>
+
+                    <span class="badge-cert">
+                     {{ $producto->certificacion }}
+                    </span>
+                @endif
+
+                <a class="btn-comprar"
+                   href="{{ route('productos.show', ['producto' => $producto->id_producto]) }}">
+                    Ver detalles
+                </a>
+
+            </div>
+
+
+        @endforeach
+    </div>
+
+</div>
+
+@include('portalTemplates.partials.footer')
+
+</body>
+</html>`;
+
+const CU2_VIEW_DET_CODE = `<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ $producto->nombre }} - Greenlink</title>
+    <link rel="stylesheet" href="{{ asset('css/grupo1.css') }}">
+</head>
+
+<body>
+
+@include('portalTemplates.partials.header')
+
+<header class="catalogo-header">
+    <div class="header-text">
+        <h1>{{ $producto->nombre }}</h1>
+        <p>Detalles del producto y vendedores disponibles</p>
+    </div>
+</header>
+
+<div class="catalogo-container">
+
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+
+        <div class="carrito-cta">
+            <a href="{{ route('portal.productos') }}" class="cta-btn cta-btn-ghost">Seguir comprando</a>
+            <a href="{{ route('carrito.index') }}" class="cta-btn cta-btn-primary">Ver carrito</a>
+        </div>
+    @endif
+
+    @if ($errors->has('cantidad'))
+        <div class="alert alert-danger">
+            {{ $errors->first('cantidad') }}
+        </div>
+    @endif
+
+    {{-- ====================
+         DATOS DEL PRODUCTO
+         ==================== --}}
+    <section class="producto-detalle-principal detalle-producto-page">
+
+    <h2>{{ $producto->nombre }}</h2>
+
+        <div class="producto-detalle">
+            <strong>Categoría:</strong>
+            <span>{{ $producto->categoria }}</span>
+        </div>
+
+        <div class="producto-detalle">
+            <strong>Descripción:</strong>
+            <span>{{ $producto->descripcion }}</span>
+        </div>
+
+        @if($producto->certificacion)
+            <div class="producto-detalle">
+                <strong>Certificación:</strong>
+                <span>{{ $producto->certificacion }}</span>
+            </div>
+
+            <span class="badge-cert">
+                {{ $producto->certificacion }}
+            </span>
+        @endif
+    </section>
+
+    {{-- ====================
+         LISTA DE VENDEDORES
+         ==================== --}}
+    <section class="producto-vendedores">
+        <h2>Vendedores que ofrecen este producto</h2>
+
+        @if($vendedores->isEmpty())
+            <p>No hay vendedores disponibles para este producto.</p>
+        @else
+            <div class="productos-grid">
+
+                @foreach($vendedores as $vendedor)
+                    <div class="producto-card">
+
+                        <h3>{{ $vendedor->nombre }}</h3>
+
+                        <div class="producto-detalle">
+                            <strong>Tipo comercio:</strong>
+                            <span>{{ $vendedor->tipo_comercio }}</span>
+                        </div>
+
+                        <div class="producto-detalle">
+                            <strong>Canal:</strong>
+                            <span>{{ $vendedor->canal }}</span>
+                        </div>
+
+                        <div class="producto-detalle">
+                            <strong>País:</strong>
+                            <span>{{ $vendedor->pais }}</span>
+                        </div>
+
+                        <div class="producto-detalle">
+                            <strong>Stock:</strong>
+                            <span>{{ $vendedor->pivot->stock }}</span>
+                        </div>
+
+                        <span class="badge-cert">
+                            {{ number_format($vendedor->pivot->precio, 2, ',', '.') }} €
+                        </span>
+
+                        <form action="{{ route('carrito.add') }}" method="POST" class="carrito-add-form">
+                            @csrf
+                            <input type="hidden" name="id_producto" value="{{ $producto->id_producto }}">
+                            <input type="hidden" name="id_contenido" value="{{ $vendedor->pivot->id_contenido }}">
+
+                            <label for="cantidad-{{ $vendedor->id_vendedor }}">Cantidad</label>
+                            <input id="cantidad-{{ $vendedor->id_vendedor }}"
+                                   type="number"
+                                   name="cantidad"
+                                   min="1"
+                                   max="{{ $vendedor->pivot->stock }}"
+                                   value="1">
+
+                            <button type="submit" class="btn btn-primary">
+                                Añadir al carrito
+                            </button>
+                        </form>
+
+                    </div>
+                @endforeach
+
+            </div>
+        @endif
+    </section>
+
+</div>
+
+@include('portalTemplates.partials.footer')
+
+</body>
+</html>`;
+
+const CU2_CONTROLLER_CODE = `<?php
+
+namespace App\\Http\\Controllers;
+
+use App\\Models\\Producto;
+use Illuminate\\Http\\Request;
+
+class ProductoController extends Controller
+{
+    public function index()
+    {
+        $productos = Producto::all();
+        return view('productos.index', compact('productos'));
+    }
+
+    public function show(Producto $producto)
+    {
+        // Cargar vendedores relacionados (tabla contenido)
+        $producto->load('vendedores');
+
+        return view('productos.show', [
+            'producto' => $producto,
+            'vendedores' => $producto->vendedores
+        ]);
+    }
+
+    public function create()
+    {
+        return view('productos.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'nombre'        => 'required|string|max:100',
+            'categoria'     => 'required|string|max:50',
+            'descripcion'   => 'required|string|max:1000',
+            'certificacion' => 'nullable|string|max:100'
+        ]);
+
+        Producto::create($validated);
+
+        return redirect()->route('productos.index');
+    }
+
+    public function edit($id)
+    {
+        $producto = Producto::findOrFail($id);
+        return view('productos.edit', compact('producto'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'nombre'        => 'required|string|max:100',
+            'categoria'     => 'required|string|max:50',
+            'descripcion'   => 'required|string|max:1000',
+            'certificacion' => 'nullable|string|max:100'
+        ]);
+
+        $producto = Producto::findOrFail($id);
+        $producto->update($validated);
+
+        return redirect()->route('productos.index');
+    }
+
+    public function destroy($id)
+    {
+        Producto::destroy($id);
+        return redirect()->route('productos.index');
+    }
+
+    /* -----------------------------
+    *   CATÁLOGO PÚBLICO DEL PORTAL
+    * -----------------------------*/
+    public function catalogo(Request $request)
+    {
+        // recoger categorías únicas
+        $categorias = Producto::select('categoria')
+            ->distinct()
+            ->orderBy('categoria')
+            ->pluck('categoria');
+
+        // base query
+        $query = Producto::query();
+
+        // filtrar por categoría si existe
+        if ($request->filled('categoria')) {
+            $query->where('categoria', $request->categoria);
+        }
+
+        /*
+         * ELIMINAMOS EL ORDEN POR PRECIO
+         * porque precio ya NO existe en productos
+         * Más adelante podemos ordenar por precio mínimo en tabla contenido.
+         */
+
+        $productos = $query->get();
+
+        return view('productos.catalogo', compact('productos', 'categorias'));
+    }
+}`;
+
 document.addEventListener('click', (e) => {
     // Check if it is a tech nav button
     if (e.target.classList.contains('tech-nav-btn')) {
@@ -338,19 +665,27 @@ document.addEventListener('click', (e) => {
 
         // Logic for CU1 (Tab switching)
         const tab = e.target.getAttribute('data-tab');
-        if (tab) {
-            const codeBlock = document.getElementById('cu1-code-block');
-            if (codeBlock) {
-                if (tab === 'controller') {
-                    codeBlock.textContent = CU1_CONTROLLER_CODE;
-                } else if (tab === 'view') {
-                    codeBlock.textContent = CU1_VIEW_CODE;
-                }
 
-                // Re-run Prism highlight
-                if (window.Prism) {
-                    Prism.highlightElement(codeBlock);
-                }
+        // CU1 Handling
+        if (tab === 'controller' || tab === 'view') {
+            const cu1CodeBlock = document.getElementById('cu1-code-block');
+            if (cu1CodeBlock) {
+                if (tab === 'controller') cu1CodeBlock.textContent = CU1_CONTROLLER_CODE;
+                else if (tab === 'view') cu1CodeBlock.textContent = CU1_VIEW_CODE;
+                if (window.Prism) Prism.highlightElement(cu1CodeBlock);
+            }
+        }
+
+        // CU2 Handling
+        if (tab && tab.startsWith('cu2-')) {
+            const cu2CodeBlock = document.getElementById('cu2-code-block');
+            if (cu2CodeBlock) {
+                if (tab === 'cu2-routes') cu2CodeBlock.textContent = CU2_ROUTES_CODE;
+                else if (tab === 'cu2-view-cat') cu2CodeBlock.textContent = CU2_VIEW_CAT_CODE;
+                else if (tab === 'cu2-view-det') cu2CodeBlock.textContent = CU2_VIEW_DET_CODE;
+                else if (tab === 'cu2-controller') cu2CodeBlock.textContent = CU2_CONTROLLER_CODE;
+
+                if (window.Prism) Prism.highlightElement(cu2CodeBlock);
             }
         }
 
@@ -361,9 +696,16 @@ document.addEventListener('click', (e) => {
 
 // Init CU1 default content
 document.addEventListener('DOMContentLoaded', () => {
+    // CU1 Init
     const cu1CodeBlock = document.getElementById('cu1-code-block');
     if (cu1CodeBlock) {
         cu1CodeBlock.textContent = CU1_CONTROLLER_CODE;
         // Prism will auto-highlight on load usually, but we ensure content is there first
+    }
+
+    // CU2 Init
+    const cu2CodeBlock = document.getElementById('cu2-code-block');
+    if (cu2CodeBlock) {
+        cu2CodeBlock.textContent = CU2_ROUTES_CODE;
     }
 });
