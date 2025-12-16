@@ -201,3 +201,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Manejo de botones en diapositivas de Implementación Técnica
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('tech-nav-btn')) {
+        // Encontrar el contenedor padre (columna de navegación)
+        const navColumn = e.target.closest('.tech-nav-column');
+        if (!navColumn) return;
+
+        // Quitar active de todos los botones en este grupo
+        navColumn.querySelectorAll('.tech-nav-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Activar el botón clickeado
+        e.target.classList.add('active');
+        e.preventDefault();
+        e.stopPropagation();
+    }
+});
