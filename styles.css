@@ -1289,3 +1289,65 @@
             color: #00695c;
             line-height: 1.4;
         }
+
+        /* Conclusions Grid Layout */
+        .conclusions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* 3 columns for first row */
+            gap: 25px;
+            width: 100%;
+            padding: 0 40px;
+            box-sizing: border-box;
+        }
+
+        /* Span 2 columns for the last two items to center them in a 2nd row */
+        .conclusions-grid .conclusion-card:nth-child(4),
+        .conclusions-grid .conclusion-card:nth-child(5) {
+            grid-column: span 1;
+            /* Actually, let's keep it simple or use flex for the last row if needed. 
+                                     But a 3-col grid with 5 items leaves 1 empty space. 
+                                     Let's use flex wrap for better centering of 5 items: 3 top, 2 bottom. */
+        }
+
+        .conclusions-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .conclusion-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 20px 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--secondary-color);
+            flex: 1 1 300px;
+            /* Grow, shrink, basis */
+            max-width: 350px;
+            transition: transform 0.3s ease;
+            text-align: left;
+        }
+
+        .conclusion-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .conclusion-card h3 {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .conclusion-card p {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.5;
+            margin: 0;
+        }
