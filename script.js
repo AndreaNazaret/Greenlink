@@ -1202,6 +1202,52 @@ class SensorResource extends JsonResource
     }
 }`;
 
+// CU2 EXTRA DATA
+const CU2_MIGRATION_CODE = `<?php
+
+use Illuminate\\Database\\Migrations\\Migration;
+use Illuminate\\Database\\Schema\\Blueprint;
+use Illuminate\\Support\\Facades\\Schema;
+
+return new class extends Migration {
+    public function up(): void {
+        Schema::create('productos', function (Blueprint $table) {
+            $table->id('id_producto');
+            $table->string('nombre', 100);
+            $table->string('categoria', 50);
+            $table->text('descripcion');
+            $table->string('certificacion', 100)->nullable();
+        });
+    }
+
+    public function down(): void {
+        Schema::dropIfExists('productos');
+    }
+};`;
+
+const CU2_SEEDER_CODE = `<?php
+
+namespace Database\\Seeders;
+
+use Illuminate\\Database\\Seeder;
+use Illuminate\\Support\\Facades\\DB;
+use Illuminate\\Support\\Facades\\File;
+
+class ProductosSeeder extends Seeder
+{
+    public function run(): void
+    {
+        DB::statement('SET NAMES utf8mb4');
+
+        $path = database_path('seeders/sql/productos.sql');
+        $sql  = File::get($path);
+
+        $sql = preg_replace('/^\\s*USE\\s+.+?;$/mi', '', $sql);
+
+        DB::unprepared($sql);
+    }
+}`;
+
 document.addEventListener('click', (e) => {
     // Check if it is a tech nav button
     if (e.target.classList.contains('tech-nav-btn')) {
